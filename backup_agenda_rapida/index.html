@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Rápida</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2196F3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Cabeçalho -->
+        <header class="header">
+            <h1 id="app-title">Agenda Rápida</h1>
+        </header>
+
+        <!-- Botões Horizontais de Controle -->
+        <div class="control-buttons">
+            <button id="add-notes-btn" class="control-btn">
+                <span class="icon">📝</span>
+                <span id="add-notes-text">Adicionar Notas</span>
+            </button>
+            <button id="sort-btn" class="control-btn">
+                <span class="icon">🔄</span>
+                <span id="sort-text">Classificar</span>
+            </button>
+            <button id="scroll-down-btn" class="control-btn">
+                <span class="icon">⬇️</span>
+                <span id="scroll-text">Rolar</span>
+            </button>
+            <button id="settings-btn" class="control-btn">
+                <span class="icon">⚙️</span>
+                <span id="settings-text">Configurações</span>
+            </button>
+        </div>
+
+        <!-- Container Principal dos Agendamentos -->
+        <div class="agenda-container" id="agenda-container">
+            <!-- Agendamentos serão inseridos aqui dinamicamente -->
+        </div>
+
+        <!-- Botão Adicionar Novo Agendamento -->
+        <button id="add-agenda-btn" class="add-btn">
+            <span class="icon">➕</span>
+            <span id="add-agenda-text">Novo Agendamento</span>
+        </button>
+
+        <!-- Modal de Configurações -->
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="settings-title">Configurações</h2>
+                <div class="setting-group">
+                    <label id="language-label">Idioma:</label>
+                    <select id="language-select">
+                        <option value="pt">Português</option>
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="zh">中文</option>
+                        <option value="hi">हिन्दी</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Classificação -->
+        <div id="sort-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="sort-title">Classificar Por</h2>
+                <div class="sort-options">
+                    <button id="sort-by-color" class="sort-option-btn">
+                        <span class="icon">🎨</span>
+                        <span id="sort-color-text">Por Cor</span>
+                    </button>
+                    <button id="sort-by-date" class="sort-option-btn">
+                        <span class="icon">📅</span>
+                        <span id="sort-date-text">Por Data</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Cores -->
+        <div id="color-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="color-title">Escolher Dia da Semana</h2>
+                <div class="color-options">
+                    <button class="color-option" data-day="segunda" data-color="#FF5722">
+                        <span class="color-circle" style="background-color: #FF5722;"></span>
+                        <span id="monday-text">Segunda-feira</span>
+                    </button>
+                    <button class="color-option" data-day="terça" data-color="#FF9800">
+                        <span class="color-circle" style="background-color: #FF9800;"></span>
+                        <span id="tuesday-text">Terça-feira</span>
+                    </button>
+                    <button class="color-option" data-day="quarta" data-color="#FFC107">
+                        <span class="color-circle" style="background-color: #FFC107;"></span>
+                        <span id="wednesday-text">Quarta-feira</span>
+                    </button>
+                    <button class="color-option" data-day="quinta" data-color="#4CAF50">
+                        <span class="color-circle" style="background-color: #4CAF50;"></span>
+                        <span id="thursday-text">Quinta-feira</span>
+                    </button>
+                    <button class="color-option" data-day="sexta" data-color="#2196F3">
+                        <span class="color-circle" style="background-color: #2196F3;"></span>
+                        <span id="friday-text">Sexta-feira</span>
+                    </button>
+                    <button class="color-option" data-day="sábado" data-color="#9C27B0">
+                        <span class="color-circle" style="background-color: #9C27B0;"></span>
+                        <span id="saturday-text">Sábado</span>
+                    </button>
+                    <button class="color-option" data-day="domingo" data-color="#E91E63">
+                        <span class="color-circle" style="background-color: #E91E63;"></span>
+                        <span id="sunday-text">Domingo</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Lixeira -->
+        <div id="trash-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="trash-title">Lixeira</h2>
+                <div class="trash-controls">
+                    <button id="empty-trash-btn" class="trash-control-btn">
+                        <span class="icon">🗑️</span>
+                        <span id="empty-trash-text">Esvaziar Lixeira</span>
+                    </button>
+                </div>
+                <div id="trash-container" class="trash-container">
+                    <!-- Itens da lixeira serão inseridos aqui -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Input de arquivo oculto -->
+        <input type="file" id="file-input" accept="image/*,.pdf,.doc,.docx" style="display: none;" multiple>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

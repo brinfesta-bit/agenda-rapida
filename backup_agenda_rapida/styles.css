@@ -1,0 +1,631 @@
+/* Reset e configurações básicas */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.app-container {
+    max-width: 100vw;
+    min-height: 100vh;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+}
+
+/* Cabeçalho */
+.header {
+    text-align: center;
+    padding: 15px 0;
+    background: linear-gradient(45deg, #2196F3, #21CBF3);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.header h1 {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Botões de Controle Horizontais */
+.control-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 5px;
+}
+
+.control-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-height: 70px;
+}
+
+.control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    border-color: #2196F3;
+}
+
+.control-btn .icon {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.control-btn span:last-child {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+}
+
+/* Container de Agendamentos */
+.agenda-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px 5px;
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+.agenda-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.agenda-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.agenda-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+/* Item de Agendamento */
+.agenda-item {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-left: 6px solid #ccc;
+    transition: all 0.3s ease;
+    cursor: move;
+    position: relative;
+}
+
+.agenda-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.agenda-item.dragging {
+    opacity: 0.7;
+    transform: rotate(5deg);
+}
+
+/* Cores dos dias da semana */
+.agenda-item.segunda {
+    border-left-color: #FF5722;
+    background: linear-gradient(135deg, #fff 0%, #ffebee 100%);
+}
+
+.agenda-item.terca {
+    border-left-color: #FF9800;
+    background: linear-gradient(135deg, #fff 0%, #fff3e0 100%);
+}
+
+.agenda-item.quarta {
+    border-left-color: #FFC107;
+    background: linear-gradient(135deg, #fff 0%, #fffde7 100%);
+}
+
+.agenda-item.quinta {
+    border-left-color: #4CAF50;
+    background: linear-gradient(135deg, #fff 0%, #e8f5e8 100%);
+}
+
+.agenda-item.sexta {
+    border-left-color: #2196F3;
+    background: linear-gradient(135deg, #fff 0%, #e3f2fd 100%);
+}
+
+.agenda-item.sabado {
+    border-left-color: #9C27B0;
+    background: linear-gradient(135deg, #fff 0%, #f3e5f5 100%);
+}
+
+.agenda-item.domingo {
+    border-left-color: #E91E63;
+    background: linear-gradient(135deg, #fff 0%, #fce4ec 100%);
+}
+
+/* Cabeçalho do item */
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.item-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.item-title:focus {
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.item-datetime {
+    font-size: 0.75rem;
+    color: #666;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+/* Conteúdo do item */
+.item-content {
+    margin-bottom: 15px;
+}
+
+.item-notes {
+    width: 100%;
+    min-height: 60px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.8);
+    transition: border-color 0.3s ease;
+}
+
+.item-notes:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+/* Arquivos anexados */
+.item-files {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(33, 150, 243, 0.1);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    color: #2196F3;
+}
+
+.file-item .remove-file {
+    cursor: pointer;
+    color: #f44336;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/* Botões de ação do item */
+.item-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 50px;
+}
+
+.action-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-1px);
+}
+
+.action-btn .icon {
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+}
+
+.action-btn span:last-child {
+    font-size: 0.7rem;
+    color: #666;
+    text-align: center;
+}
+
+/* Botão Adicionar */
+.add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.add-btn .icon {
+    font-size: 1.3rem;
+}
+
+/* Modais */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #f44336;
+}
+
+.modal h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+/* Opções de cor */
+.color-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.color-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.color-option:hover {
+    border-color: #2196F3;
+    background: #f8f9fa;
+}
+
+.color-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Opções de classificação */
+.sort-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sort-option-btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.sort-option-btn:hover {
+    border-color: #2196F3;
+    background: #f8f9fa;
+}
+
+.sort-option-btn .icon {
+    font-size: 1.5rem;
+}
+
+/* Configurações */
+.setting-group {
+    margin-bottom: 15px;
+}
+
+.setting-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.setting-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+}
+
+.setting-group select:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+/* Lixeira */
+.trash-controls {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.trash-control-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.trash-control-btn:hover {
+    background: #d32f2f;
+}
+
+.trash-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.trash-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    border-left: 4px solid #ccc;
+}
+
+.trash-item-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.trash-action-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.3s ease;
+}
+
+.restore-btn {
+    background: #4CAF50;
+    color: white;
+}
+
+.restore-btn:hover {
+    background: #45a049;
+}
+
+.delete-btn {
+    background: #f44336;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #d32f2f;
+}
+
+/* Responsividade para tablets */
+@media (min-width: 768px) {
+    .app-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .control-buttons {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .modal-content {
+        margin: 5% auto;
+        max-width: 500px;
+    }
+}
+
+/* Responsividade para desktop */
+@media (min-width: 1024px) {
+    .app-container {
+        max-width: 800px;
+    }
+    
+    .agenda-container {
+        max-height: calc(100vh - 250px);
+    }
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.agenda-item {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Estados de loading */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Feedback visual para ações */
+.success {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2) !important;
+}
+
+.error {
+    border-color: #f44336 !important;
+    box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2) !important;
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Modo escuro (opcional) */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+    
+    .app-container {
+        background: rgba(30, 30, 30, 0.95);
+        color: #e0e0e0;
+    }
+    
+    .agenda-item {
+        background: #2a2a2a;
+        color: #e0e0e0;
+    }
+    
+    .modal-content {
+        background: #2a2a2a;
+        color: #e0e0e0;
+    }
+}

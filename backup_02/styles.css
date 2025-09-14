@@ -42,7 +42,7 @@ body {
 /* Grid de Botões */
 .button-grid {
     display: flex;
-    gap: 2px;
+    gap: 10px;
     padding: 0 20px;
     margin-bottom: 20px;
     align-items: center;
@@ -75,16 +75,11 @@ body {
 
 .large-btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    width: 480px;
+    width: 180px;
 }
 
 .small-btn {
     background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-    width: 120px;
-}
-
-.square-btn {
-    width: 120px;
 }
 
 .square-btn .icon {
@@ -101,36 +96,6 @@ body {
 }
 
 .small-btn .icon {
-    font-size: 1.2rem;
-}
-
-/* Botão da lixeira na parte inferior */
-.trash-bottom-btn {
-    width: 100%;
-    padding: 15px;
-    margin-top: 20px;
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    box-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
-}
-
-.trash-bottom-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-    background: linear-gradient(135deg, #ff5252 0%, #e53935 100%);
-}
-
-.trash-bottom-btn .icon {
     font-size: 1.2rem;
 }
 
@@ -152,7 +117,7 @@ body {
 .agenda-item.quarta {
     background: linear-gradient(135deg, #FFC107, #FF8F00) !important;
     border-color: #FFC107 !important;
-    color: black !important;
+    color: white !important;
 }
 
 .agenda-item.quinta {
@@ -179,9 +144,38 @@ body {
     color: white !important;
 }
 
-/* Ajustar texto dos itens coloridos para melhor legibilidade */
+/* Texto branco para itens de agendamento coloridos, exceto campos de entrada */
+.agenda-item.segunda,
+.agenda-item.terca,
+.agenda-item.quarta,
+.agenda-item.quinta,
+.agenda-item.sexta,
+.agenda-item.sabado,
+.agenda-item.domingo {
+    color: white !important;
+}
+
+.agenda-item.segunda *:not(.item-title):not(.item-notes),
+.agenda-item.terca *:not(.item-title):not(.item-notes),
+.agenda-item.quarta *:not(.item-title):not(.item-notes),
+.agenda-item.quinta *:not(.item-title):not(.item-notes),
+.agenda-item.sexta *:not(.item-title):not(.item-notes),
+.agenda-item.sabado *:not(.item-title):not(.item-notes),
+.agenda-item.domingo *:not(.item-title):not(.item-notes) {
+    color: white !important;
+}
+
+/* Texto preto para campos de entrada do usuário */
+.agenda-item.segunda .item-title,
+.agenda-item.segunda .item-notes,
+.agenda-item.terca .item-title,
+.agenda-item.terca .item-notes,
 .agenda-item.quarta .item-title,
 .agenda-item.quarta .item-notes,
+.agenda-item.quinta .item-title,
+.agenda-item.quinta .item-notes,
+.agenda-item.sexta .item-title,
+.agenda-item.sexta .item-notes,
 .agenda-item.sabado .item-title,
 .agenda-item.sabado .item-notes,
 .agenda-item.domingo .item-title,
@@ -243,20 +237,14 @@ body {
 
 /* Item de Agendamento */
 .agenda-item {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: white;
     border-radius: 15px;
     padding: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border-left: 6px solid #6c757d;
+    border-left: 6px solid #ccc;
     transition: all 0.3s ease;
     cursor: move;
     position: relative;
-}
-
-/* Itens sem dia específico (mantém cor cinza) */
-.agenda-item:not(.segunda):not(.terca):not(.quarta):not(.quinta):not(.sexta):not(.sabado):not(.domingo) {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-left-color: #6c757d;
 }
 
 .agenda-item:hover {
@@ -331,9 +319,8 @@ body {
     background: rgba(0, 0, 0, 0.05);
     padding: 4px 8px;
     border-radius: 8px;
-    margin-bottom: 8px;
-    display: block;
-    text-align: right;
+    margin-bottom: 10px;
+    display: inline-block;
 }
 
 /* Conteúdo do item */
@@ -362,7 +349,10 @@ body {
 
 /* Arquivos anexados */
 .item-files {
-    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
 }
 
 .file-item {
@@ -532,154 +522,290 @@ body {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.color-option span {
-    font-weight: 500;
-    color: #333;
-}
-
-/* Formulário de agendamento */
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #333;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 0.9rem;
-    transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #2196F3;
-    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
-}
-
-.form-group textarea {
-    min-height: 80px;
-    resize: vertical;
-}
-
-/* Botões do formulário */
-.form-buttons {
+/* Opções de classificação */
+.sort-options {
     display: flex;
-    gap: 10px;
-    justify-content: flex-end;
+    flex-direction: column;
+    gap: 15px;
     margin-top: 20px;
 }
 
-.btn {
+.sort-option-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.sort-option-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.sort-option-btn .icon {
+    font-size: 1.5rem;
+}
+
+
+
+/* Configurações */
+.setting-group {
+    margin-bottom: 15px;
+}
+
+.setting-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.setting-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+}
+
+.setting-group select:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+/* Lixeira */
+.trash-controls {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.trash-control-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     padding: 10px 20px;
+    background: #f44336;
+    color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
-.btn-primary {
-    background: #2196F3;
+.trash-control-btn:hover {
+    background: #d32f2f;
+}
+
+.trash-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.trash-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    border-left: 4px solid #ccc;
+}
+
+.trash-item-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.trash-action-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.3s ease;
+}
+
+.restore-btn {
+    background: #4CAF50;
     color: white;
 }
 
-.btn-primary:hover {
-    background: #1976D2;
-    transform: translateY(-1px);
+.restore-btn:hover {
+    background: #45a049;
 }
 
-.btn-secondary {
-    background: #f5f5f5;
-    color: #666;
-    border: 1px solid #ddd;
+.delete-btn {
+    background: #f44336;
+    color: white;
 }
 
-.btn-secondary:hover {
-    background: #e0e0e0;
+.delete-btn:hover {
+    background: #d32f2f;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
+/* Responsividade para tablets */
+@media (min-width: 768px) {
     .app-container {
-        padding: 5px;
-        gap: 10px;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
     }
     
-    .button-grid {
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 0 10px;
+    .control-buttons {
+        grid-template-columns: repeat(4, 1fr);
     }
     
-    .large-btn {
-        width: 100%;
-        max-width: 200px;
-    }
-    
-    .grid-btn {
-        min-width: 80px;
-    }
-    
-    .agenda-item {
-        padding: 12px;
-    }
-    
-    .item-actions {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
+    .header h1 {
+        font-size: 2.2rem;
     }
     
     .modal-content {
-        width: 95%;
         margin: 5% auto;
-        padding: 15px;
+        max-width: 500px;
     }
 }
 
-@media (max-width: 480px) {
-    .header h1 {
-        font-size: 1.5rem;
-    }
-    
-    .button-grid {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .large-btn,
-    .small-btn,
-    .square-btn {
-        width: 100%;
-        height: 60px;
+/* Responsividade para desktop */
+@media (min-width: 1024px) {
+    .app-container {
+        max-width: 800px;
     }
     
     .agenda-container {
-        padding: 5px;
+        max-height: calc(100vh - 250px);
+    }
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.agenda-item {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Estados de loading */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Feedback visual para ações */
+.success {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2) !important;
+}
+
+.error {
+    border-color: #f44336 !important;
+    box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2) !important;
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Modo escuro (opcional) */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+    
+    .app-container {
+        background: rgba(30, 30, 30, 0.95);
+        color: #e0e0e0;
     }
     
     .agenda-item {
-        padding: 10px;
+        background: #2a2a2a;
+        color: #e0e0e0;
     }
     
-    .item-actions {
-        grid-template-columns: 1fr;
+    .modal-content {
+        background: #2a2a2a;
+        color: #e0e0e0;
     }
+}
+
+/* Estilos para autenticação */
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+    position: relative;
+}
+
+.header h1 {
+    text-align: center;
+    flex: 1;
+}
+
+.user-info {
+    position: absolute;
+    right: 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.logout-btn {
+    background: #ff4757;
+    color: white;
+    border: none;
+    width: 90px;
+    height: 70px;
+    padding: 8px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.logout-btn:hover {
+    background: #ff3742;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }

@@ -352,8 +352,8 @@ function createNewAgendaItem() {
         id: generateId(),
         title: translations[currentLanguage].newItem,
         notes: '',
-        day: '',
-        color: '#6c757d',
+        day: 'segunda',
+        color: dayColors['segunda'],
         datetime: now.toISOString(),
         files: []
     };
@@ -374,21 +374,11 @@ function createNewAgendaItem() {
 // Renderizar itens da agenda
 function renderAgendaItems() {
     const container = document.getElementById('agenda-container');
-    
-    // Remover apenas os itens de agenda, preservando o botão da lixeira
-    const agendaItemElements = container.querySelectorAll('.agenda-item');
-    agendaItemElements.forEach(element => element.remove());
-    
-    // Adicionar os itens de agenda antes do botão da lixeira
-    const trashButton = container.querySelector('.trash-bottom-btn');
+    container.innerHTML = '';
     
     agendaItems.forEach(item => {
         const itemElement = createAgendaItemElement(item);
-        if (trashButton) {
-            container.insertBefore(itemElement, trashButton);
-        } else {
-            container.appendChild(itemElement);
-        }
+        container.appendChild(itemElement);
     });
 }
 
@@ -407,10 +397,11 @@ function createAgendaItemElement(item) {
     });
     
     div.innerHTML = `
+        <span class="item-title" onclick="editTitle('${item.id}', this)" style="cursor: pointer;">${item.title}</span>
+        <div class="item-datetime">${formattedDate} ${formattedTime}</div>
         <div class="item-content">
-            <div class="item-datetime">${formattedDate} ${formattedTime}</div>
             <textarea class="item-notes" placeholder="${translations[currentLanguage].enterText}" 
-                      onchange="updateItemNotes('${item.id}', this.value)">${item.title ? item.title + '\n\n' + item.notes : item.notes}</textarea>
+                      onchange="updateItemNotes('${item.id}', this.value)">${item.notes}</textarea>
             <div class="item-files">
                 ${item.files.map(file => `
                     <div class="file-item">
@@ -516,23 +507,13 @@ function updateItemOrder() {
 }
 
 // Funções de atualização de itens
-// Função para editar título clicando
-
-
-function updateItemNotes(id, content) {
+function updateItemTitle(id, title) {
     const item = agendaItems.find(item => item.id === id);
     if (item) {
-        const lines = content.split('\n');
-        if (lines.length > 0) {
-            item.title = lines[0].trim();
-            item.notes = lines.slice(1).join('\n').trim();
-        } else {
-            item.title = content.trim();
-            item.notes = '';
-        }
+        item.title = title;
         
         // Detectar dia da semana no título e alterar cor automaticamente
-        const lowerTitle = item.title.toLowerCase();
+        const lowerTitle = title.toLowerCase();
         for (const [day, color] of Object.entries(dayColors)) {
             if (lowerTitle.includes(day)) {
                 item.day = day;
@@ -547,6 +528,63 @@ function updateItemNotes(id, content) {
             }
         }
         
+        saveData();
+    }
+}
+
+// Função para editar título clicando
+function editTitle(id, element) {
+    const currentTitle = element.textContent;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = currentTitle;
+    input.className = 'item-title-edit';
+    input.style.cssText = 'width: 100%; border: none; background: transparent; color: inherit; font-size: inherit; font-weight: inherit; outline: 2px solid #007bff; border-radius: 4px; padding: 2px;';
+    
+    // Substituir o div pelo input
+    element.parentNode.replaceChild(input, element);
+    input.focus();
+    input.select();
+    
+    // Função para salvar e voltar ao div
+    function saveAndRevert() {
+        const newTitle = input.value.trim() || currentTitle;
+        updateItemTitle(id, newTitle);
+        
+        const newDiv = document.createElement('div');
+        newDiv.className = 'item-title';
+        newDiv.onclick = () => editTitle(id, newDiv);
+        newDiv.style.cursor = 'pointer';
+        newDiv.textContent = newTitle;
+        
+        input.parentNode.replaceChild(newDiv, input);
+    }
+    
+    // Salvar ao pressionar Enter ou perder foco
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            saveAndRevert();
+        }
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            // Cancelar edição
+            const newDiv = document.createElement('div');
+            newDiv.className = 'item-title';
+            newDiv.onclick = () => editTitle(id, newDiv);
+            newDiv.style.cursor = 'pointer';
+            newDiv.textContent = currentTitle;
+            input.parentNode.replaceChild(newDiv, input);
+        }
+    });
+    
+    input.addEventListener('blur', saveAndRevert);
+}
+
+function updateItemNotes(id, notes) {
+    const item = agendaItems.find(item => item.id === id);
+    if (item) {
+        item.notes = notes;
         saveData();
     }
 }
@@ -952,10 +990,10 @@ async function loadData() {
 
 // Event listener para abrir lixeira
 document.addEventListener('DOMContentLoaded', function() {
-    // Adicionar botão da lixeira na parte inferior da lista de agendamentos
-    const agendaContainer = document.getElementById('agenda-container');
+    // Adicionar botão da lixeira aos controles
+    const controlButtons = document.querySelector('.button-grid');
     const trashButton = document.createElement('button');
-    trashButton.className = 'trash-bottom-btn';
+    trashButton.className = 'grid-btn small-btn';
     trashButton.innerHTML = `
         <span class="icon">🗑️</span>
         <span>Lixeira</span>
@@ -965,8 +1003,9 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('trash-modal').style.display = 'block';
     });
     
-    // Inserir no final do container de agendamentos
-    agendaContainer.appendChild(trashButton);
+    // Inserir antes do botão de configurações
+    const settingsBtn = document.getElementById('settings-btn');
+    controlButtons.insertBefore(trashButton, settingsBtn);
 });
 
 // Adicionar estilos de animação para toast
@@ -1190,7 +1229,7 @@ function setupWeekdayDetection() {
 }
 
 // Exportar funções globais para uso no HTML
-
+window.updateItemTitle = updateItemTitle;
 window.updateItemNotes = updateItemNotes;
 window.openColorModal = openColorModal;
 window.deleteItem = deleteItem;

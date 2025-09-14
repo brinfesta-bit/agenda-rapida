@@ -7,6 +7,8 @@ let draggedItem = null;
 let currentEditingItem = null;
 let recognition = null;
 let isRecording = false;
+let currentUser = null;
+let isOfflineMode = false;
 
 // Cores dos dias da semana
 const dayColors = {
@@ -23,9 +25,9 @@ const dayColors = {
 const translations = {
     pt: {
         appTitle: 'Agenda Rápida',
-        addNotes: 'Adicionar Notas',
         sort: 'Classificar',
         scroll: 'Rolar',
+    
         settings: 'Configurações',
         newAgenda: 'Novo Agendamento',
         settingsTitle: 'Configurações',
@@ -33,6 +35,8 @@ const translations = {
         sortTitle: 'Classificar Por',
         sortByColor: 'Por Cor',
         sortByDate: 'Por Data',
+    
+
         colorTitle: 'Escolher Dia da Semana',
         monday: 'Segunda-feira',
         tuesday: 'Terça-feira',
@@ -49,14 +53,14 @@ const translations = {
         addFile: 'Arquivo',
         restore: 'Restaurar',
         deleteForever: 'Excluir',
-        newItem: 'Novo Item',
+        newItem: '',
         enterText: 'Digite suas anotações aqui...'
     },
     en: {
         appTitle: 'Quick Agenda',
-        addNotes: 'Add Notes',
         sort: 'Sort',
         scroll: 'Scroll',
+        organize: 'Organize',
         settings: 'Settings',
         newAgenda: 'New Schedule',
         settingsTitle: 'Settings',
@@ -64,6 +68,9 @@ const translations = {
         sortTitle: 'Sort By',
         sortByColor: 'By Color',
         sortByDate: 'By Date',
+        organizeTitle: 'Organize By',
+        organizeByColor: 'By Color',
+        organizeByDate: 'By Date',
         colorTitle: 'Choose Day of Week',
         monday: 'Monday',
         tuesday: 'Tuesday',
@@ -80,14 +87,14 @@ const translations = {
         addFile: 'File',
         restore: 'Restore',
         deleteForever: 'Delete',
-        newItem: 'New Item',
+        newItem: '',
         enterText: 'Enter your notes here...'
     },
     es: {
         appTitle: 'Agenda Rápida',
-        addNotes: 'Añadir Notas',
         sort: 'Clasificar',
         scroll: 'Desplazar',
+    
         settings: 'Configuración',
         newAgenda: 'Nueva Cita',
         settingsTitle: 'Configuración',
@@ -95,6 +102,8 @@ const translations = {
         sortTitle: 'Clasificar Por',
         sortByColor: 'Por Color',
         sortByDate: 'Por Fecha',
+    
+
         colorTitle: 'Elegir Día de la Semana',
         monday: 'Lunes',
         tuesday: 'Martes',
@@ -111,14 +120,14 @@ const translations = {
         addFile: 'Archivo',
         restore: 'Restaurar',
         deleteForever: 'Eliminar',
-        newItem: 'Nuevo Elemento',
+        newItem: '',
         enterText: 'Ingrese sus notas aquí...'
     },
     zh: {
         appTitle: '快速日程',
-        addNotes: '添加笔记',
         sort: '排序',
         scroll: '滚动',
+        organize: '整理',
         settings: '设置',
         newAgenda: '新日程',
         settingsTitle: '设置',
@@ -126,6 +135,9 @@ const translations = {
         sortTitle: '排序方式',
         sortByColor: '按颜色',
         sortByDate: '按日期',
+        organizeTitle: '整理方式',
+        organizeByColor: '按颜色',
+        organizeByDate: '按日期',
         colorTitle: '选择星期',
         monday: '星期一',
         tuesday: '星期二',
@@ -142,14 +154,14 @@ const translations = {
         addFile: '文件',
         restore: '恢复',
         deleteForever: '删除',
-        newItem: '新项目',
+        newItem: '',
         enterText: '在此输入您的笔记...'
     },
     hi: {
         appTitle: 'त्वरित एजेंडा',
-        addNotes: 'नोट्स जोड़ें',
         sort: 'क्रमबद्ध करें',
         scroll: 'स्क्रॉल करें',
+        organize: 'व्यवस्थित करें',
         settings: 'सेटिंग्स',
         newAgenda: 'नया शेड्यूल',
         settingsTitle: 'सेटिंग्स',
@@ -157,6 +169,9 @@ const translations = {
         sortTitle: 'इसके द्वारा क्रमबद्ध करें',
         sortByColor: 'रंग के द्वारा',
         sortByDate: 'दिनांक के द्वारा',
+        organizeTitle: 'इसके द्वारा व्यवस्थित करें',
+        organizeByColor: 'रंग के द्वारा',
+        organizeByDate: 'दिनांक के द्वारा',
         colorTitle: 'सप्ताह का दिन चुनें',
         monday: 'सोमवार',
         tuesday: 'मंगलवार',
@@ -173,19 +188,70 @@ const translations = {
         addFile: 'फ़ाइल',
         restore: 'पुनर्स्थापित करें',
         deleteForever: 'हटाएं',
-        newItem: 'नया आइटम',
+        newItem: '',
         enterText: 'यहाँ अपने नोट्स दर्ज करें...'
     }
 };
 
 // Inicialização
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    await checkAuthentication();
     initializeApp();
     loadData();
     setupEventListeners();
     setupSpeechRecognition();
     updateLanguage();
 });
+
+// Verificar autenticação
+async function checkAuthentication() {
+    if (typeof supabase === 'undefined') {
+        console.log('Supabase não configurado, usando modo offline');
+        isOfflineMode = true;
+        return;
+    }
+    
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+            // Redirecionar para página de login
+            window.location.href = 'auth.html';
+            return;
+        }
+        
+        currentUser = session.user;
+        setupUserInterface();
+        
+        // Migrar dados do localStorage se necessário
+        await migrateLocalDataToSupabase();
+        
+    } catch (error) {
+        console.error('Erro na autenticação:', error);
+        isOfflineMode = true;
+    }
+}
+
+// Configurar interface do usuário autenticado
+function setupUserInterface() {
+    if (currentUser) {
+        const userInfo = document.getElementById('user-info');
+        const userEmail = document.getElementById('user-email');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        userEmail.textContent = currentUser.email;
+        userInfo.style.display = 'flex';
+        
+        logoutBtn.addEventListener('click', async () => {
+            stopAutoSync();
+            await supabase.auth.signOut();
+            window.location.href = 'auth.html';
+        });
+        
+        // Iniciar sincronização automática
+        setupAutoSync();
+    }
+}
 
 // Inicializar aplicativo
 function initializeApp() {
@@ -198,16 +264,13 @@ function initializeApp() {
 // Configurar event listeners
 function setupEventListeners() {
     // Botões de controle
-    document.getElementById('add-notes-btn').addEventListener('click', () => {
-        // Funcionalidade de adicionar notas globais (futura implementação)
-        showToast('Funcionalidade em desenvolvimento');
-    });
     
     document.getElementById('sort-btn').addEventListener('click', () => {
         document.getElementById('sort-modal').style.display = 'block';
     });
     
     document.getElementById('scroll-down-btn').addEventListener('click', scrollToBottom);
+
     document.getElementById('settings-btn').addEventListener('click', () => {
         document.getElementById('settings-modal').style.display = 'block';
     });
@@ -229,6 +292,8 @@ function setupEventListeners() {
         closeModal('sort-modal');
     });
     
+
+    
     // Configurações
     document.getElementById('language-select').addEventListener('change', (e) => {
         currentLanguage = e.target.value;
@@ -241,6 +306,9 @@ function setupEventListeners() {
     
     // Input de arquivo
     document.getElementById('file-input').addEventListener('change', handleFileSelect);
+    
+    // Detectar dias da semana nos campos de texto
+    setupWeekdayDetection();
 }
 
 // Configurar listeners dos modais
@@ -652,6 +720,9 @@ function sortItems(type) {
     showToast(`Itens classificados por ${type === 'color' ? 'cor' : 'data'}`);
 }
 
+// Organizar itens (agrupamento visual)
+
+
 // Rolar para o final
 function scrollToBottom() {
     const container = document.getElementById('agenda-container');
@@ -738,9 +809,9 @@ function updateLanguage() {
     
     // Atualizar textos da interface
     document.getElementById('app-title').textContent = t.appTitle;
-    document.getElementById('add-notes-text').textContent = t.addNotes;
     document.getElementById('sort-text').textContent = t.sort;
     document.getElementById('scroll-text').textContent = t.scroll;
+
     document.getElementById('settings-text').textContent = t.settings;
     document.getElementById('add-agenda-text').textContent = t.newAgenda;
     document.getElementById('settings-title').textContent = t.settingsTitle;
@@ -748,6 +819,8 @@ function updateLanguage() {
     document.getElementById('sort-title').textContent = t.sortTitle;
     document.getElementById('sort-color-text').textContent = t.sortByColor;
     document.getElementById('sort-date-text').textContent = t.sortByDate;
+
+
     document.getElementById('color-title').textContent = t.colorTitle;
     document.getElementById('monday-text').textContent = t.monday;
     document.getElementById('tuesday-text').textContent = t.tuesday;
@@ -812,7 +885,7 @@ function generateId() {
 }
 
 // Salvar dados
-function saveData() {
+async function saveData() {
     const data = {
         agendaItems,
         trashItems,
@@ -821,7 +894,13 @@ function saveData() {
     };
     
     try {
+        // Salvar no localStorage (backup local)
         localStorage.setItem('agendaRapida', JSON.stringify(data));
+        
+        // Salvar no Supabase se autenticado
+        if (!isOfflineMode && currentUser && typeof supabase !== 'undefined') {
+            await saveUserData(currentUser.id, data);
+        }
     } catch (error) {
         console.error('Erro ao salvar dados:', error);
         showToast('Erro ao salvar dados');
@@ -829,11 +908,28 @@ function saveData() {
 }
 
 // Carregar dados
-function loadData() {
+async function loadData() {
     try {
-        const savedData = localStorage.getItem('agendaRapida');
-        if (savedData) {
-            const data = JSON.parse(savedData);
+        let data = null;
+        
+        // Tentar carregar do Supabase primeiro se autenticado
+        if (!isOfflineMode && currentUser && typeof supabase !== 'undefined') {
+            try {
+                data = await loadUserData(currentUser.id);
+            } catch (error) {
+                console.log('Erro ao carregar do Supabase, usando localStorage:', error);
+            }
+        }
+        
+        // Fallback para localStorage se não conseguiu carregar do Supabase
+        if (!data) {
+            const savedData = localStorage.getItem('agendaRapida');
+            if (savedData) {
+                data = JSON.parse(savedData);
+            }
+        }
+        
+        if (data) {
             agendaItems = data.agendaItems || [];
             trashItems = data.trashItems || [];
             currentLanguage = data.currentLanguage || 'pt';
@@ -850,9 +946,9 @@ function loadData() {
 // Event listener para abrir lixeira
 document.addEventListener('DOMContentLoaded', function() {
     // Adicionar botão da lixeira aos controles
-    const controlButtons = document.querySelector('.control-buttons');
+    const controlButtons = document.querySelector('.button-grid');
     const trashButton = document.createElement('button');
-    trashButton.className = 'control-btn';
+    trashButton.className = 'grid-btn small-btn';
     trashButton.innerHTML = `
         <span class="icon">🗑️</span>
         <span>Lixeira</span>
@@ -881,6 +977,116 @@ style.textContent = `
         }
     }
     
+// Migrar dados do localStorage para Supabase
+async function migrateLocalDataToSupabase() {
+    if (isOfflineMode || !currentUser || typeof supabase === 'undefined') {
+        return;
+    }
+    
+    try {
+        // Verificar se já existem dados no Supabase
+        const existingData = await loadUserData(currentUser.id);
+        
+        if (!existingData) {
+            // Carregar dados do localStorage
+            const localData = localStorage.getItem('agendaRapida');
+            
+            if (localData) {
+                const data = JSON.parse(localData);
+                
+                // Salvar no Supabase
+                await saveUserData(currentUser.id, data);
+                
+                console.log('Dados migrados do localStorage para Supabase');
+                showToast('Dados sincronizados com a nuvem');
+            }
+        }
+    } catch (error) {
+        console.error('Erro na migração de dados:', error);
+    }
+}
+
+// Sincronização automática de dados
+let syncInterval = null;
+
+function setupAutoSync() {
+    if (isOfflineMode || !currentUser || typeof supabase === 'undefined') {
+        return;
+    }
+    
+    // Sincronizar a cada 30 segundos
+    syncInterval = setInterval(async () => {
+        try {
+            await syncDataWithSupabase();
+        } catch (error) {
+            console.error('Erro na sincronização automática:', error);
+        }
+    }, 30000);
+    
+    // Sincronizar quando a página ganha foco
+    window.addEventListener('focus', async () => {
+        if (!isOfflineMode && currentUser) {
+            await syncDataWithSupabase();
+        }
+    });
+    
+    // Sincronizar antes de fechar a página
+    window.addEventListener('beforeunload', async () => {
+        if (!isOfflineMode && currentUser) {
+            await saveData();
+        }
+    });
+}
+
+async function syncDataWithSupabase() {
+    if (isOfflineMode || !currentUser || typeof supabase === 'undefined') {
+        return;
+    }
+    
+    try {
+        // Carregar dados mais recentes do Supabase
+        const cloudData = await loadUserData(currentUser.id);
+        
+        if (cloudData) {
+            // Verificar se os dados locais são diferentes
+            const localData = {
+                agendaItems,
+                trashItems,
+                currentLanguage,
+                version: '1.0'
+            };
+            
+            const localDataString = JSON.stringify(localData);
+            const cloudDataString = JSON.stringify(cloudData);
+            
+            if (localDataString !== cloudDataString) {
+                // Atualizar dados locais com dados da nuvem
+                agendaItems = cloudData.agendaItems || [];
+                trashItems = cloudData.trashItems || [];
+                currentLanguage = cloudData.currentLanguage || 'pt';
+                
+                // Atualizar interface
+                renderAgendaItems();
+                renderTrash();
+                updateLanguage();
+                
+                // Salvar no localStorage
+                localStorage.setItem('agendaRapida', JSON.stringify(cloudData));
+                
+                console.log('Dados sincronizados da nuvem');
+            }
+        }
+    } catch (error) {
+        console.error('Erro na sincronização:', error);
+    }
+}
+
+function stopAutoSync() {
+    if (syncInterval) {
+        clearInterval(syncInterval);
+        syncInterval = null;
+    }
+}
     @keyframes toastSlideOut {
         from {
             transform: translateX(-50%) translateY(0);
@@ -893,6 +1099,89 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Função para detectar dias da semana e alterar cores dos botões
+function setupWeekdayDetection() {
+    // Mapeamento dos dias da semana para classes CSS
+    const weekdayMap = {
+        'segunda': 'segunda',
+        'segunda-feira': 'segunda',
+        'seg': 'segunda',
+        'terça': 'terca',
+        'terca': 'terca',
+        'terça-feira': 'terca',
+        'terca-feira': 'terca',
+        'ter': 'terca',
+        'quarta': 'quarta',
+        'quarta-feira': 'quarta',
+        'qua': 'quarta',
+        'quinta': 'quinta',
+        'quinta-feira': 'quinta',
+        'qui': 'quinta',
+        'sexta': 'sexta',
+        'sexta-feira': 'sexta',
+        'sex': 'sexta',
+        'sábado': 'sabado',
+        'sabado': 'sabado',
+        'sab': 'sabado',
+        'domingo': 'domingo',
+        'dom': 'domingo'
+    };
+    
+    // Função para verificar texto e alterar cor do agendamento completo
+    function checkForWeekdays(text, targetElement) {
+        if (!text || !targetElement) return;
+        
+        const lowerText = text.toLowerCase();
+        
+        // Encontrar o item de agendamento completo
+        const agendaItem = targetElement.closest('.agenda-item');
+        if (!agendaItem) return;
+        
+        // Remover todas as classes de dias da semana primeiro
+        agendaItem.classList.remove('segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo');
+        
+        // Verificar se algum dia da semana foi mencionado
+        for (const [keyword, className] of Object.entries(weekdayMap)) {
+            if (lowerText.includes(keyword)) {
+                agendaItem.classList.add(className);
+                break; // Parar no primeiro dia encontrado
+            }
+        }
+    }
+    
+    // Adicionar listeners para mudanças nos campos (apenas no blur para não interferir na digitação)
+    document.addEventListener('blur', function(e) {
+        if (e.target.classList.contains('item-title') || e.target.classList.contains('item-notes')) {
+            checkForWeekdays(e.target.value, e.target);
+        }
+    }, true);
+    
+    // Adicionar listeners para mudanças nos campos
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('item-title') || e.target.classList.contains('item-notes')) {
+            checkForWeekdays(e.target.value, e.target);
+        }
+    });
+    
+    // Adicionar listener para detectar quando o usuário para de digitar (debounce)
+    let typingTimer;
+    document.addEventListener('input', function(e) {
+        if (e.target.classList.contains('item-title') || e.target.classList.contains('item-notes')) {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                checkForWeekdays(e.target.value, e.target);
+            }, 500); // Aguarda 500ms após parar de digitar
+        }
+    });
+    
+    // Adicionar listeners para campos já existentes na página
+    document.querySelectorAll('.item-title, .item-notes').forEach(field => {
+        if (field.value) {
+            checkForWeekdays(field.value, field);
+        }
+    });
+}
 
 // Exportar funções globais para uso no HTML
 window.updateItemTitle = updateItemTitle;

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Agenda Rápida</title>
+    <link rel="stylesheet" href="auth-styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2196F3">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>📅 Agenda Rápida</h1>
+                <p class="auth-subtitle">Faça login para sincronizar seus dados</p>
+            </div>
+
+            <!-- Acesso Direto -->
+            <div class="direct-access">
+                <h2>Bem-vindo à Agenda Rápida</h2>
+                <p>Seus dados serão salvos localmente no seu dispositivo.</p>
+            </div>
+
+            <!-- Botão para acessar o app -->
+            <div class="offline-option">
+                <button id="useOffline" class="auth-btn primary">Acessar Agenda</button>
+            </div>
+        </div>
+
+        <!-- Loading e mensagens -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="loading-spinner"></div>
+            <p>Processando...</p>
+        </div>
+
+        <div id="messageContainer" class="message-container hidden">
+            <div id="messageContent" class="message-content"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="auth-script.js"></script>
+</body>
+</html>

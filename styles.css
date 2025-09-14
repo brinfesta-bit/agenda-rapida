@@ -28,10 +28,11 @@ body {
 /* Cabeçalho */
 .header {
     text-align: center;
-    padding: 15px 0;
+    padding: 20px;
     background: linear-gradient(45deg, #2196F3, #21CBF3);
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+    margin-bottom: 20px;
 }
 
 .header h1 {
@@ -39,47 +40,168 @@ body {
     font-size: 1.8rem;
     font-weight: 600;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 0;
 }
 
-/* Botões de Controle Horizontais */
-.control-buttons {
+/* Grid de Botões 2x2 */
+.button-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 0 5px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 15px;
+    padding: 0 20px;
+    margin-bottom: 20px;
 }
 
-.control-btn {
+.grid-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12px 8px;
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: 12px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    min-height: 70px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: white;
+    gap: 8px;
 }
 
-.control-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    border-color: #2196F3;
+.large-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 25px 20px;
+    font-size: 1.1rem;
 }
 
-.control-btn .icon {
+.small-btn {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    padding: 15px 10px;
+    font-size: 0.9rem;
+}
+
+.grid-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.grid-btn .icon {
     font-size: 1.5rem;
-    margin-bottom: 4px;
 }
 
-.control-btn span:last-child {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: #333;
-    text-align: center;
+.small-btn .icon {
+    font-size: 1.2rem;
+}
+
+
+
+/* Classes para cores dos dias da semana nos itens de agendamento completos */
+.agenda-item.segunda {
+    background: linear-gradient(135deg, #FF5722, #E64A19) !important;
+    border-color: #FF5722 !important;
+    color: white !important;
+}
+
+.agenda-item.terca {
+    background: linear-gradient(135deg, #FF9800, #F57C00) !important;
+    border-color: #FF9800 !important;
+    color: white !important;
+}
+
+.agenda-item.quarta {
+    background: linear-gradient(135deg, #FFC107, #FF8F00) !important;
+    border-color: #FFC107 !important;
+    color: white !important;
+}
+
+.agenda-item.quinta {
+    background: linear-gradient(135deg, #4CAF50, #388E3C) !important;
+    border-color: #4CAF50 !important;
+    color: white !important;
+}
+
+.agenda-item.sexta {
+    background: linear-gradient(135deg, #2196F3, #1976D2) !important;
+    border-color: #2196F3 !important;
+    color: white !important;
+}
+
+.agenda-item.sabado {
+    background: linear-gradient(135deg, #9C27B0, #7B1FA2) !important;
+    border-color: #9C27B0 !important;
+    color: white !important;
+}
+
+.agenda-item.domingo {
+    background: linear-gradient(135deg, #E91E63, #C2185B) !important;
+    border-color: #E91E63 !important;
+    color: white !important;
+}
+
+/* Texto branco para itens de agendamento coloridos, exceto campos de entrada */
+.agenda-item.segunda,
+.agenda-item.terca,
+.agenda-item.quarta,
+.agenda-item.quinta,
+.agenda-item.sexta,
+.agenda-item.sabado,
+.agenda-item.domingo {
+    color: white !important;
+}
+
+.agenda-item.segunda *:not(.item-title):not(.item-notes),
+.agenda-item.terca *:not(.item-title):not(.item-notes),
+.agenda-item.quarta *:not(.item-title):not(.item-notes),
+.agenda-item.quinta *:not(.item-title):not(.item-notes),
+.agenda-item.sexta *:not(.item-title):not(.item-notes),
+.agenda-item.sabado *:not(.item-title):not(.item-notes),
+.agenda-item.domingo *:not(.item-title):not(.item-notes) {
+    color: white !important;
+}
+
+/* Texto preto para campos de entrada do usuário */
+.agenda-item.segunda .item-title,
+.agenda-item.segunda .item-notes,
+.agenda-item.terca .item-title,
+.agenda-item.terca .item-notes,
+.agenda-item.quarta .item-title,
+.agenda-item.quarta .item-notes,
+.agenda-item.quinta .item-title,
+.agenda-item.quinta .item-notes,
+.agenda-item.sexta .item-title,
+.agenda-item.sexta .item-notes,
+.agenda-item.sabado .item-title,
+.agenda-item.sabado .item-notes,
+.agenda-item.domingo .item-title,
+.agenda-item.domingo .item-notes {
+    color: black !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+/* Manter estilos dos botões de ação dentro dos itens coloridos */
+.agenda-item.segunda .action-btn,
+.agenda-item.terca .action-btn,
+.agenda-item.quarta .action-btn,
+.agenda-item.quinta .action-btn,
+.agenda-item.sexta .action-btn,
+.agenda-item.sabado .action-btn,
+.agenda-item.domingo .action-btn {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+}
+
+.agenda-item.segunda .action-btn:hover,
+.agenda-item.terca .action-btn:hover,
+.agenda-item.quarta .action-btn:hover,
+.agenda-item.quinta .action-btn:hover,
+.agenda-item.sexta .action-btn:hover,
+.agenda-item.sabado .action-btn:hover,
+.agenda-item.domingo .action-btn:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
 }
 
 /* Container de Agendamentos */
@@ -406,30 +528,36 @@ body {
 .sort-options {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 .sort-option-btn {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 15px;
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
+    gap: 10px;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .sort-option-btn:hover {
-    border-color: #2196F3;
-    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
 .sort-option-btn .icon {
     font-size: 1.5rem;
 }
+
+
 
 /* Configurações */
 .setting-group {
@@ -628,4 +756,36 @@ body {
         background: #2a2a2a;
         color: #e0e0e0;
     }
+}
+
+/* Estilos para autenticação */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.logout-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
 }

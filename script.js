@@ -54,7 +54,14 @@ const translations = {
         restore: 'Restaurar',
         deleteForever: 'Excluir',
         newItem: '',
-        enterText: 'Digite suas anotações aqui...'
+        enterText: 'Digite suas anotações aqui...',
+        colorSettings: 'Personalizar Cores dos Dias:',
+        customizeColors: 'Configurar Cores',
+        colorCustomizationTitle: 'Personalizar Cores dos Dias',
+        resetColors: 'Restaurar Padrão',
+        saveColors: 'Salvar Cores',
+        colorsReset: 'Cores restauradas para o padrão',
+        colorsSaved: 'Cores personalizadas salvas'
     },
     en: {
         appTitle: 'Quick Agenda',
@@ -88,7 +95,14 @@ const translations = {
         restore: 'Restore',
         deleteForever: 'Delete',
         newItem: '',
-        enterText: 'Enter your notes here...'
+        enterText: 'Enter your notes here...',
+        colorSettings: 'Customize Day Colors:',
+        customizeColors: 'Configure Colors',
+        colorCustomizationTitle: 'Customize Day Colors',
+        resetColors: 'Reset Default',
+        saveColors: 'Save Colors',
+        colorsReset: 'Colors reset to default',
+        colorsSaved: 'Custom colors saved'
     },
     es: {
         appTitle: 'Agenda Rápida',
@@ -121,7 +135,14 @@ const translations = {
         restore: 'Restaurar',
         deleteForever: 'Eliminar',
         newItem: '',
-        enterText: 'Ingrese sus notas aquí...'
+        enterText: 'Ingrese sus notas aquí...',
+        colorSettings: 'Personalizar Colores de Días:',
+        customizeColors: 'Configurar Colores',
+        colorCustomizationTitle: 'Personalizar Colores de Días',
+        resetColors: 'Restaurar Predeterminado',
+        saveColors: 'Guardar Colores',
+        colorsReset: 'Colores restaurados por defecto',
+        colorsSaved: 'Colores personalizados guardados'
     },
     zh: {
         appTitle: '快速日程',
@@ -155,7 +176,14 @@ const translations = {
         restore: '恢复',
         deleteForever: '删除',
         newItem: '',
-        enterText: '在此输入您的笔记...'
+        enterText: '在此输入您的笔记...',
+        colorSettings: '自定义日期颜色:',
+        customizeColors: '配置颜色',
+        colorCustomizationTitle: '自定义日期颜色',
+        resetColors: '恢复默认',
+        saveColors: '保存颜色',
+        colorsReset: '颜色已恢复为默认',
+        colorsSaved: '自定义颜色已保存'
     },
     hi: {
         appTitle: 'त्वरित एजेंडा',
@@ -189,7 +217,14 @@ const translations = {
         restore: 'पुनर्स्थापित करें',
         deleteForever: 'हटाएं',
         newItem: '',
-        enterText: 'यहाँ अपने नोट्स दर्ज करें...'
+        enterText: 'यहाँ अपने नोट्स दर्ज करें...',
+        colorSettings: 'दिन के रंग अनुकूलित करें:',
+        customizeColors: 'रंग कॉन्फ़िगर करें',
+        colorCustomizationTitle: 'दिन के रंग अनुकूलित करें',
+        resetColors: 'डिफ़ॉल्ट रीसेट करें',
+        saveColors: 'रंग सहेजें',
+        colorsReset: 'रंग डिफ़ॉल्ट पर रीसेट हो गए',
+        colorsSaved: 'कस्टम रंग सहेजे गए'
     }
 };
 
@@ -271,6 +306,91 @@ function setupEventListeners() {
     
     document.getElementById('scroll-down-btn').addEventListener('click', scrollToBottom);
 
+    // Configurar detecção automática de dias da semana
+    setupWeekdayDetection();
+
+// Configurar detecção automática de dias da semana
+function setupWeekdayDetection() {
+    const dayColors = {
+        'segunda': '#FF5722',
+        'terça': '#FF9800', 
+        'quarta': '#FFC107',
+        'quinta': '#4CAF50',
+        'sexta': '#2196F3',
+        'sábado': '#9C27B0',
+        'domingo': '#F44336'
+    };
+
+    function checkForWeekdays(text, item) {
+        const lowerText = text.toLowerCase();
+        for (const [day, color] of Object.entries(dayColors)) {
+            if (lowerText.includes(day)) {
+                item.day = day;
+                item.color = color;
+                
+                // Atualizar classe CSS do elemento
+                const element = document.querySelector(`[data-id="${item.id}"]`);
+                if (element) {
+                    element.className = `agenda-item ${day}`;
+                }
+                saveData();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Adicionar listeners para campos de título
+    document.addEventListener('blur', (e) => {
+        if (e.target.classList.contains('item-title')) {
+            const itemElement = e.target.closest('.agenda-item');
+            if (itemElement) {
+                const itemId = itemElement.dataset.id;
+                const item = agendaItems.find(item => item.id === itemId);
+                if (item) {
+                    checkForWeekdays(e.target.value, item);
+                }
+            }
+        }
+    }, true);
+
+    // Adicionar listeners para campos de notas
+    document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('item-notes')) {
+            const itemElement = e.target.closest('.agenda-item');
+            if (itemElement) {
+                const itemId = itemElement.dataset.id;
+                const item = agendaItems.find(item => item.id === itemId);
+                if (item) {
+                    checkForWeekdays(e.target.value, item);
+                }
+            }
+        }
+    }, true);
+
+    // Adicionar listeners para entrada de texto em tempo real
+    document.addEventListener('input', (e) => {
+        if (e.target.classList.contains('item-title') || e.target.classList.contains('item-notes')) {
+            const itemElement = e.target.closest('.agenda-item');
+            if (itemElement) {
+                const itemId = itemElement.dataset.id;
+                const item = agendaItems.find(item => item.id === itemId);
+                if (item) {
+                    checkForWeekdays(e.target.value, item);
+                }
+            }
+        }
+    }, true);
+
+    // Verificar itens existentes
+    agendaItems.forEach(item => {
+        const titleText = item.title || '';
+        const notesText = item.notes || '';
+        const combinedText = `${titleText} ${notesText}`;
+        checkForWeekdays(combinedText, item);
+    });
+}
+
     document.getElementById('settings-btn').addEventListener('click', () => {
         document.getElementById('settings-modal').style.display = 'block';
     });
@@ -306,9 +426,6 @@ function setupEventListeners() {
     
     // Input de arquivo
     document.getElementById('file-input').addEventListener('change', handleFileSelect);
-    
-    // Detectar dias da semana nos campos de texto
-    setupWeekdayDetection();
 }
 
 // Configurar listeners dos modais
@@ -343,6 +460,180 @@ function setupModalListeners() {
             }
         });
     });
+    
+    // Event listener para o botão "Configurar Cores"
+    const customizeColorsBtn = document.getElementById('customize-colors-btn');
+    if (customizeColorsBtn) {
+        customizeColorsBtn.addEventListener('click', () => {
+            openColorCustomizationModal();
+        });
+    }
+    
+    // Event listener para o botão "Restaurar Padrão"
+    const resetColorsBtn = document.getElementById('reset-colors-btn');
+    if (resetColorsBtn) {
+        resetColorsBtn.addEventListener('click', () => {
+            resetColorsToDefault();
+        });
+    }
+    
+    // Event listener para o botão "Salvar Cores"
+    const saveColorsBtn = document.getElementById('save-colors-btn');
+    if (saveColorsBtn) {
+        saveColorsBtn.addEventListener('click', () => {
+            saveCustomColors();
+        });
+    }
+}
+
+// Funções para personalização de cores
+function openColorCustomizationModal() {
+    const modal = document.getElementById('color-customization-modal');
+    if (modal) {
+        // Carregar cores atuais nos inputs
+        loadCurrentColorsInInputs();
+        modal.style.display = 'block';
+    }
+}
+
+function loadCurrentColorsInInputs() {
+    const colorInputs = {
+        'segunda': document.getElementById('color-segunda'),
+        'terça': document.getElementById('color-terca'),
+        'quarta': document.getElementById('color-quarta'),
+        'quinta': document.getElementById('color-quinta'),
+        'sexta': document.getElementById('color-sexta'),
+        'sábado': document.getElementById('color-sabado'),
+        'domingo': document.getElementById('color-domingo')
+    };
+    
+    Object.keys(colorInputs).forEach(day => {
+        const input = colorInputs[day];
+        if (input && dayColors[day]) {
+            input.value = dayColors[day];
+            // Atualizar também o círculo de cor correspondente
+            const colorCircle = input.parentElement.querySelector('.color-circle');
+            if (colorCircle) {
+                colorCircle.style.backgroundColor = dayColors[day];
+            }
+        }
+    });
+}
+
+function resetColorsToDefault() {
+    const defaultColors = {
+        'segunda': '#FFEB3B',
+        'terça': '#FF9800', 
+        'quarta': '#FFC107',
+        'quinta': '#4CAF50',
+        'sexta': '#2196F3',
+        'sábado': '#9C27B0',
+        'domingo': '#E91E63'
+    };
+    
+    // Atualizar o objeto dayColors
+    Object.assign(dayColors, defaultColors);
+    
+    // Atualizar os inputs
+    loadCurrentColorsInInputs();
+    
+    // Atualizar os estilos CSS
+    updateCSSColors();
+    
+    // Re-renderizar os itens para aplicar as novas cores
+    renderAgendaItems();
+    
+    // Salvar no localStorage
+    saveData();
+    
+    // Mostrar mensagem de confirmação
+    showToast(translations[currentLanguage].colorsReset);
+}
+
+function saveCustomColors() {
+    const colorInputs = {
+        'segunda': document.getElementById('color-segunda'),
+        'terça': document.getElementById('color-terca'),
+        'quarta': document.getElementById('color-quarta'),
+        'quinta': document.getElementById('color-quinta'),
+        'sexta': document.getElementById('color-sexta'),
+        'sábado': document.getElementById('color-sabado'),
+        'domingo': document.getElementById('color-domingo')
+    };
+    
+    // Atualizar o objeto dayColors com os novos valores
+    Object.keys(colorInputs).forEach(day => {
+        const input = colorInputs[day];
+        if (input && input.value) {
+            dayColors[day] = input.value;
+        }
+    });
+    
+    // Atualizar os estilos CSS
+    updateCSSColors();
+    
+    // Re-renderizar os itens para aplicar as novas cores
+    renderAgendaItems();
+    
+    // Fechar o modal
+    closeModal('color-customization-modal');
+    
+    // Salvar no localStorage
+    saveData();
+    
+    // Mostrar mensagem de confirmação
+    showToast(translations[currentLanguage].colorsSaved);
+}
+
+function updateCSSColors() {
+    // Remover estilos antigos se existirem
+    const existingStyle = document.getElementById('custom-day-colors');
+    if (existingStyle) {
+        existingStyle.remove();
+    }
+    
+    // Criar novos estilos CSS
+    const style = document.createElement('style');
+    style.id = 'custom-day-colors';
+    
+    let cssRules = '';
+    
+    Object.keys(dayColors).forEach(day => {
+        const color = dayColors[day];
+        cssRules += `
+            .agenda-item.${day} {
+                border-left-color: ${color} !important;
+            }
+            .agenda-item.${day} {
+                background: linear-gradient(135deg, ${color}, ${adjustBrightness(color, -20)}) !important;
+                color: ${getContrastColor(color)} !important;
+            }
+        `;
+    });
+    
+    style.textContent = cssRules;
+    document.head.appendChild(style);
+}
+
+// Função auxiliar para ajustar o brilho de uma cor
+function adjustBrightness(hex, percent) {
+    const num = parseInt(hex.replace('#', ''), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = (num >> 16) + amt;
+    const G = (num >> 8 & 0x00FF) + amt;
+    const B = (num & 0x0000FF) + amt;
+    return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+        (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+        (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+}
+
+// Função auxiliar para determinar a cor do texto baseada no contraste
+function getContrastColor(hexcolor) {
+    const r = parseInt(hexcolor.substr(1, 2), 16);
+    const g = parseInt(hexcolor.substr(3, 2), 16);
+    const b = parseInt(hexcolor.substr(5, 2), 16);
+    const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return brightness > 128 ? '#000000' : '#ffffff';
 }
 
 // Criar novo item de agendamento
@@ -352,8 +643,8 @@ function createNewAgendaItem() {
         id: generateId(),
         title: translations[currentLanguage].newItem,
         notes: '',
-        day: '',
-        color: '#6c757d',
+        day: 'neutro',
+        color: '#9E9E9E',
         datetime: now.toISOString(),
         files: []
     };
@@ -362,11 +653,13 @@ function createNewAgendaItem() {
     renderAgendaItems();
     saveData();
     
-    // Automaticamente ativar edição do título do novo item
+    // Automaticamente focar no campo de notas do novo item
     setTimeout(() => {
-        const newItemElement = document.querySelector(`[data-id="${item.id}"] .item-title`);
-        if (newItemElement) {
-            editTitle(item.id, newItemElement);
+        const newItemNotesElement = document.querySelector(`[data-id="${item.id}"] .item-notes`);
+        if (newItemNotesElement) {
+            newItemNotesElement.focus();
+            // Posicionar cursor no final do placeholder
+            newItemNotesElement.setSelectionRange(0, 0);
         }
     }, 100);
 }
@@ -374,21 +667,11 @@ function createNewAgendaItem() {
 // Renderizar itens da agenda
 function renderAgendaItems() {
     const container = document.getElementById('agenda-container');
-    
-    // Remover apenas os itens de agenda, preservando o botão da lixeira
-    const agendaItemElements = container.querySelectorAll('.agenda-item');
-    agendaItemElements.forEach(element => element.remove());
-    
-    // Adicionar os itens de agenda antes do botão da lixeira
-    const trashButton = container.querySelector('.trash-bottom-btn');
+    container.innerHTML = '';
     
     agendaItems.forEach(item => {
         const itemElement = createAgendaItemElement(item);
-        if (trashButton) {
-            container.insertBefore(itemElement, trashButton);
-        } else {
-            container.appendChild(itemElement);
-        }
+        container.appendChild(itemElement);
     });
 }
 
@@ -407,15 +690,16 @@ function createAgendaItemElement(item) {
     });
     
     div.innerHTML = `
+        <span class="item-title">${item.title}</span>
+        <div class="item-datetime">${formattedDate} ${formattedTime}</div>
         <div class="item-content">
-            <div class="item-datetime">${formattedDate} ${formattedTime}</div>
             <textarea class="item-notes" placeholder="${translations[currentLanguage].enterText}" 
-                      onchange="updateItemNotes('${item.id}', this.value)">${item.title ? item.title + '\n\n' + item.notes : item.notes}</textarea>
+                      onchange="updateItemNotes('${item.id}', this.value)">${item.notes}</textarea>
             <div class="item-files">
                 ${item.files.map(file => `
                     <div class="file-item">
                         <span>📎 ${file.name}</span>
-                        <span class="remove-file" onclick="removeFile('${item.id}', '${file.name}')">&times;</span>
+                        <span class="remove-file" onclick="removeFile('${item.id}', '${file.name}')"></span>
                     </div>
                 `).join('')}
             </div>
@@ -442,6 +726,11 @@ function createAgendaItemElement(item) {
     
     // Adicionar event listeners para drag and drop
     setupDragAndDrop(div);
+    
+    // Adicionar event listener para edição do título
+    const titleElement = div.querySelector('.item-title');
+    titleElement.style.cursor = 'pointer';
+    titleElement.addEventListener('click', () => editTitle(item.id, titleElement));
     
     return div;
 }
@@ -516,23 +805,13 @@ function updateItemOrder() {
 }
 
 // Funções de atualização de itens
-// Função para editar título clicando
-
-
-function updateItemNotes(id, content) {
+function updateItemTitle(id, title) {
     const item = agendaItems.find(item => item.id === id);
     if (item) {
-        const lines = content.split('\n');
-        if (lines.length > 0) {
-            item.title = lines[0].trim();
-            item.notes = lines.slice(1).join('\n').trim();
-        } else {
-            item.title = content.trim();
-            item.notes = '';
-        }
+        item.title = title;
         
         // Detectar dia da semana no título e alterar cor automaticamente
-        const lowerTitle = item.title.toLowerCase();
+        const lowerTitle = title.toLowerCase();
         for (const [day, color] of Object.entries(dayColors)) {
             if (lowerTitle.includes(day)) {
                 item.day = day;
@@ -547,6 +826,63 @@ function updateItemNotes(id, content) {
             }
         }
         
+        saveData();
+    }
+}
+
+// Função para editar título clicando
+function editTitle(id, element) {
+    const currentTitle = element.textContent;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = currentTitle;
+    input.className = 'item-title-edit';
+    input.style.cssText = 'width: 100%; border: none; background: transparent; color: inherit; font-size: inherit; font-weight: inherit; outline: 2px solid #007bff; border-radius: 4px; padding: 2px;';
+    
+    // Substituir o div pelo input
+    element.parentNode.replaceChild(input, element);
+    input.focus();
+    input.select();
+    
+    // Função para salvar e voltar ao div
+    function saveAndRevert() {
+        const newTitle = input.value.trim() || currentTitle;
+        updateItemTitle(id, newTitle);
+        
+        const newDiv = document.createElement('div');
+        newDiv.className = 'item-title';
+        newDiv.onclick = () => editTitle(id, newDiv);
+        newDiv.style.cursor = 'pointer';
+        newDiv.textContent = newTitle;
+        
+        input.parentNode.replaceChild(newDiv, input);
+    }
+    
+    // Salvar ao pressionar Enter ou perder foco
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            saveAndRevert();
+        }
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            // Cancelar edição
+            const newDiv = document.createElement('div');
+            newDiv.className = 'item-title';
+            newDiv.onclick = () => editTitle(id, newDiv);
+            newDiv.style.cursor = 'pointer';
+            newDiv.textContent = currentTitle;
+            input.parentNode.replaceChild(newDiv, input);
+        }
+    });
+    
+    input.addEventListener('blur', saveAndRevert);
+}
+
+function updateItemNotes(id, notes) {
+    const item = agendaItems.find(item => item.id === id);
+    if (item) {
+        item.notes = notes;
         saveData();
     }
 }
@@ -827,6 +1163,21 @@ function updateLanguage() {
     document.getElementById('sort-color-text').textContent = t.sortByColor;
     document.getElementById('sort-date-text').textContent = t.sortByDate;
 
+    // Atualizar textos da personalização de cores
+    document.getElementById('color-settings-label').textContent = t.colorSettings;
+    document.getElementById('customize-colors-text').textContent = t.customizeColors;
+    document.getElementById('color-customization-title').textContent = t.colorCustomizationTitle;
+    document.getElementById('reset-colors-text').textContent = t.resetColors;
+    document.getElementById('save-colors-text').textContent = t.saveColors;
+    
+    // Atualizar labels dos dias da semana no modal de personalização
+    document.getElementById('monday-label').textContent = t.monday;
+    document.getElementById('tuesday-label').textContent = t.tuesday;
+    document.getElementById('wednesday-label').textContent = t.wednesday;
+    document.getElementById('thursday-label').textContent = t.thursday;
+    document.getElementById('friday-label').textContent = t.friday;
+    document.getElementById('saturday-label').textContent = t.saturday;
+    document.getElementById('sunday-label').textContent = t.sunday;
 
     document.getElementById('color-title').textContent = t.colorTitle;
     document.getElementById('monday-text').textContent = t.monday;
@@ -950,12 +1301,30 @@ async function loadData() {
     }
 }
 
+// Função para rolar para o topo
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
 // Event listener para abrir lixeira
 document.addEventListener('DOMContentLoaded', function() {
-    // Adicionar botão da lixeira na parte inferior da lista de agendamentos
+    // Adicionar botão da lixeira no final da lista de agendamentos
     const agendaContainer = document.getElementById('agenda-container');
+    
+    // Container para os botões
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.style.display = 'flex';
+    buttonsContainer.style.gap = '10px';
+    buttonsContainer.style.justifyContent = 'center';
+    buttonsContainer.style.marginTop = '15px';
+    
+    // Botão da lixeira
     const trashButton = document.createElement('button');
-    trashButton.className = 'trash-bottom-btn';
+    trashButton.id = 'trash-btn';
+    trashButton.className = 'trash-btn-bottom';
     trashButton.innerHTML = `
         <span class="icon">🗑️</span>
         <span>Lixeira</span>
@@ -965,8 +1334,22 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('trash-modal').style.display = 'block';
     });
     
-    // Inserir no final do container de agendamentos
-    agendaContainer.appendChild(trashButton);
+    // Botão de seta para cima
+    const scrollTopButton = document.createElement('button');
+    scrollTopButton.id = 'scroll-top-btn';
+    scrollTopButton.className = 'trash-btn-bottom';
+    scrollTopButton.innerHTML = `
+        <span class="icon">⬆️</span>
+        <span>Topo</span>
+    `;
+    scrollTopButton.addEventListener('click', scrollToTop);
+    
+    // Adicionar botões ao container
+    buttonsContainer.appendChild(trashButton);
+    buttonsContainer.appendChild(scrollTopButton);
+    
+    // Inserir o container após o container de agendamentos
+    agendaContainer.parentNode.insertBefore(buttonsContainer, agendaContainer.nextSibling);
 });
 
 // Adicionar estilos de animação para toast
@@ -1106,91 +1489,10 @@ function stopAutoSync() {
 `;
 document.head.appendChild(style);
 
-// Função para detectar dias da semana e alterar cores dos botões
-function setupWeekdayDetection() {
-    // Mapeamento dos dias da semana para classes CSS
-    const weekdayMap = {
-        'segunda': 'segunda',
-        'segunda-feira': 'segunda',
-        'seg': 'segunda',
-        'terça': 'terca',
-        'terca': 'terca',
-        'terça-feira': 'terca',
-        'terca-feira': 'terca',
-        'ter': 'terca',
-        'quarta': 'quarta',
-        'quarta-feira': 'quarta',
-        'qua': 'quarta',
-        'quinta': 'quinta',
-        'quinta-feira': 'quinta',
-        'qui': 'quinta',
-        'sexta': 'sexta',
-        'sexta-feira': 'sexta',
-        'sex': 'sexta',
-        'sábado': 'sabado',
-        'sabado': 'sabado',
-        'sab': 'sabado',
-        'domingo': 'domingo',
-        'dom': 'domingo'
-    };
-    
-    // Função para verificar texto e alterar cor do agendamento completo
-    function checkForWeekdays(text, targetElement) {
-        if (!text || !targetElement) return;
-        
-        const lowerText = text.toLowerCase();
-        
-        // Encontrar o item de agendamento completo
-        const agendaItem = targetElement.closest('.agenda-item');
-        if (!agendaItem) return;
-        
-        // Remover todas as classes de dias da semana primeiro
-        agendaItem.classList.remove('segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo');
-        
-        // Verificar se algum dia da semana foi mencionado
-        for (const [keyword, className] of Object.entries(weekdayMap)) {
-            if (lowerText.includes(keyword)) {
-                agendaItem.classList.add(className);
-                break; // Parar no primeiro dia encontrado
-            }
-        }
-    }
-    
-    // Adicionar listeners para mudanças nos campos (apenas no blur para não interferir na digitação)
-    document.addEventListener('blur', function(e) {
-        if (e.target.classList.contains('item-title') || e.target.classList.contains('item-notes')) {
-            checkForWeekdays(e.target.value, e.target);
-        }
-    }, true);
-    
-    // Adicionar listeners para mudanças nos campos
-    document.addEventListener('change', function(e) {
-        if (e.target.classList.contains('item-title') || e.target.classList.contains('item-notes')) {
-            checkForWeekdays(e.target.value, e.target);
-        }
-    });
-    
-    // Adicionar listener para detectar quando o usuário para de digitar (debounce)
-    let typingTimer;
-    document.addEventListener('input', function(e) {
-        if (e.target.classList.contains('item-title') || e.target.classList.contains('item-notes')) {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(() => {
-                checkForWeekdays(e.target.value, e.target);
-            }, 500); // Aguarda 500ms após parar de digitar
-        }
-    });
-    
-    // Adicionar listeners para campos já existentes na página
-    document.querySelectorAll('.item-title, .item-notes').forEach(field => {
-        if (field.value) {
-            checkForWeekdays(field.value, field);
-        }
-    });
-}
+// Função removida - a cor dos agendamentos agora só é alterada através da paleta de cores
 
 // Exportar funções globais para uso no HTML
-
+window.updateItemTitle = updateItemTitle;
 window.updateItemNotes = updateItemNotes;
 window.openColorModal = openColorModal;
 window.deleteItem = deleteItem;

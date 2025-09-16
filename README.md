@@ -1,146 +1,71 @@
-# 📱 Agenda Rápida
+# Agenda Rápida
 
-Um aplicativo web mobile para gerenciamento rápido de agendamentos com interface intuitiva e funcionalidades avançadas.
+Uma aplicação web simples e intuitiva para gerenciamento de agendamentos pessoais.
 
-## ✨ Funcionalidades
+## 📋 Funcionalidades
 
-### 🎨 Sistema de Cores Automático
-- 7 cores distintas para cada dia da semana
-- Mudança automática de cor ao digitar o nome do dia
-- Seletor manual de cores
+- ✅ **Criação de agendamentos** com título, notas e anexos
+- 🎨 **Personalização de cores** por dia da semana
+- 📁 **Anexar arquivos** aos agendamentos
+- 🎵 **Gravação de áudio** para notas de voz
+- 🗑️ **Lixeira** com possibilidade de restauração
+- 💾 **Salvamento automático** no localStorage
+- 📱 **Design responsivo** para dispositivos móveis
+- 🌙 **Suporte ao modo escuro** automático
 
-### 📱 Interface Mobile-First
-- Design responsivo para Android e iOS
-- Botões verticais arrastáveis e editáveis
-- Layout otimizado para toque
-- PWA (Progressive Web App) instalável
+## 🚀 Como usar
 
-### 🔧 Subbotões Funcionais
-Cada agendamento possui 4 subbotões:
-1. **🎨 Mudança de Cor** - Seletor visual das 7 cores
-2. **🗑️ Apagar** - Sistema de lixeira com restaurar/excluir
-3. **🎤 Microfone** - Transcrição de áudio para texto
-4. **📎 Adicionar Arquivo** - Fotos, PDFs, documentos e câmera
+1. Abra o arquivo `index.html` em seu navegador
+2. Clique em "Adicionar" para criar um novo agendamento
+3. Preencha o título e notas
+4. Escolha a cor correspondente ao dia da semana
+5. Adicione arquivos ou grave áudios se necessário
+6. Salve o agendamento
 
-### 🎛️ Controles Horizontais
-4 botões principais:
-1. **📝 Adicionar Notas** - Editor de texto completo
-2. **📊 Classificar** - Ordenação por cor e data
-3. **⬇️ Rolar para Baixo** - Navegação rápida
-4. **⚙️ Configurações** - Múltiplos idiomas e preferências
+## 🎨 Personalização de Cores
 
-### 🌍 Suporte a Idiomas
-- Português (padrão)
-- Inglês
-- Espanhol
-- Mandarim
-- Hindi
+- Acesse "Configurações" → "Configurar Cores"
+- Personalize as cores para cada dia da semana
+- As cores são salvas automaticamente
+- Use "Restaurar Padrão" para voltar às cores originais
 
-### 📅 Recursos Adicionais
-- Data e hora automática na criação
-- Arrastar e soltar para reordenar
-- Sistema de lixeira completo
-- Salvamento automático no navegador
-- Backup e restauração
-
-## 🚀 Como Usar
-
-### Instalação Local
-1. Clone o repositório:
-   ```bash
-   git clone [URL_DO_REPOSITORIO]
-   cd agenda-rapida
-   ```
-
-2. Abra o arquivo `index.html` em qualquer navegador moderno
-
-### Instalação como PWA
-1. Acesse o app no navegador mobile
-2. Toque em "Adicionar à tela inicial"
-3. O app será instalado como aplicativo nativo
-
-## 📁 Estrutura do Projeto
+## 🗂️ Estrutura do Projeto
 
 ```
-agenda-rapida/
-├── index.html          # Estrutura HTML principal
-├── styles.css          # Estilos CSS responsivos
-├── script.js           # Funcionalidades JavaScript
-├── manifest.json       # Configuração PWA
-├── .gitignore         # Arquivos ignorados pelo Git
-├── README.md          # Documentação
-└── backup_agenda_rapida/  # Backup de segurança
-    ├── README_RESTAURACAO.md
-    └── [arquivos de backup]
+├── index.html          # Página principal
+├── styles.css          # Estilos CSS
+├── script.js           # Lógica JavaScript
+├── manifest.json       # Manifesto PWA
+└── README.md           # Este arquivo
 ```
 
-## 🛠️ Tecnologias Utilizadas
+## 💾 Armazenamento
 
-- **HTML5** - Estrutura semântica
-- **CSS3** - Design responsivo e animações
-- **JavaScript ES6+** - Funcionalidades interativas
-- **Web APIs**:
-  - Speech Recognition (reconhecimento de voz)
-  - File API (manipulação de arquivos)
-  - Local Storage (armazenamento local)
-  - Drag and Drop API
-- **PWA** - Service Worker e Manifest
+Todos os dados são salvos localmente no navegador usando localStorage. Nenhuma informação é enviada para servidores externos.
 
-## 🎨 Paleta de Cores
+## 🌐 Compatibilidade
 
-| Dia | Cor | Código |
-|-----|-----|--------|
-| Domingo | Vermelho | `#ff6b6b` |
-| Segunda | Azul | `#4ecdc4` |
-| Terça | Verde | `#45b7d1` |
-| Quarta | Amarelo | `#f9ca24` |
-| Quinta | Roxo | `#6c5ce7` |
-| Sexta | Rosa | `#fd79a8` |
-| Sábado | Laranja | `#fdcb6e` |
+- ✅ Chrome/Chromium
+- ✅ Firefox
+- ✅ Safari
+- ✅ Edge
+- ✅ Dispositivos móveis
 
-## 📱 Compatibilidade
+## 📱 PWA (Progressive Web App)
 
-- ✅ Chrome 80+
-- ✅ Firefox 75+
-- ✅ Safari 13+
-- ✅ Edge 80+
-- ✅ Chrome Mobile
-- ✅ Safari Mobile
+A aplicação pode ser instalada como um app nativo em dispositivos móveis e desktop.
 
-## 🔧 Desenvolvimento
+## 🔧 Tecnologias Utilizadas
 
-### Requisitos
-- Navegador moderno com suporte a ES6+
-- Servidor local (opcional, para desenvolvimento)
+- HTML5
+- CSS3 (Flexbox, Grid, Gradients)
+- JavaScript (ES6+)
+- Web APIs (localStorage, File API, MediaRecorder)
 
-### Executar Localmente
-```bash
-# Opção 1: Abrir diretamente
-start index.html
+## 📄 Licença
 
-# Opção 2: Servidor local (Python)
-python -m http.server 8000
-
-# Opção 3: Servidor local (Node.js)
-npx serve .
-```
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 🤝 Contribuição
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📞 Contato
-
-Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue!
+Este projeto é de código aberto e está disponível sob a licença MIT.
 
 ---
 
-**Agenda Rápida** - Desenvolvido com ❤️ para facilitar seu dia a dia!
+**Desenvolvido com ❤️ para organização pessoal**

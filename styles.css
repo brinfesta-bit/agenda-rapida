@@ -65,16 +65,51 @@ body {
 
 @media (max-width: 480px) {
     .button-grid {
-        gap: 6px;
-        padding: 0 10px;
-        flex-direction: column;
-        align-items: stretch;
+        gap: 4px;
+        padding: 0 8px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
     }
     
     .grid-btn {
-        width: 100%;
-        max-width: none;
-        min-width: auto;
+        flex: 1;
+        min-width: 70px;
+        max-width: 90px;
+        height: 65px;
+        font-size: 0.75rem;
+        padding: 6px 2px;
+    }
+    
+    .grid-btn .icon {
+        font-size: 1.1rem;
+    }
+    
+    .grid-btn span:not(.icon) {
+        font-size: 0.65rem;
+        line-height: 1;
+    }
+}
+
+@media (max-width: 360px) {
+    .button-grid {
+        gap: 2px;
+        padding: 0 5px;
+    }
+    
+    .grid-btn {
+        min-width: 60px;
+        max-width: 75px;
+        height: 60px;
+        font-size: 0.7rem;
+        padding: 4px 1px;
+    }
+    
+    .grid-btn .icon {
+        font-size: 1rem;
+    }
+    
+    .grid-btn span:not(.icon) {
+        font-size: 0.6rem;
     }
 }
 

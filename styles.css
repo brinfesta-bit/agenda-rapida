@@ -48,57 +48,41 @@ body {
 /* Grid de Botões */
 .button-grid {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 10px;
     padding: 0 20px;
     margin-bottom: 20px;
     align-items: stretch;
     justify-content: center;
+    overflow-x: auto;
 }
 
 @media (max-width: 768px) {
     .button-grid {
         gap: 8px;
         padding: 0 15px;
+        flex-wrap: nowrap;
+    }
+    
+    .grid-btn {
+        flex: 1;
+        min-width: 80px;
+        max-width: 120px;
     }
 }
 
 @media (max-width: 480px) {
     .button-grid {
-        gap: 4px;
-        padding: 0 8px;
+        gap: 3px;
+        padding: 0 5px;
         flex-wrap: nowrap;
         overflow-x: auto;
     }
     
     .grid-btn {
         flex: 1;
-        min-width: 70px;
-        max-width: 90px;
-        height: 65px;
-        font-size: 0.75rem;
-        padding: 6px 2px;
-    }
-    
-    .grid-btn .icon {
-        font-size: 1.1rem;
-    }
-    
-    .grid-btn span:not(.icon) {
-        font-size: 0.65rem;
-        line-height: 1;
-    }
-}
-
-@media (max-width: 360px) {
-    .button-grid {
-        gap: 2px;
-        padding: 0 5px;
-    }
-    
-    .grid-btn {
-        min-width: 60px;
-        max-width: 75px;
+        min-width: 65px;
+        max-width: 85px;
         height: 60px;
         font-size: 0.7rem;
         padding: 4px 1px;
@@ -106,10 +90,42 @@ body {
     
     .grid-btn .icon {
         font-size: 1rem;
+        margin-bottom: 2px;
     }
     
     .grid-btn span:not(.icon) {
         font-size: 0.6rem;
+        line-height: 1;
+        text-align: center;
+    }
+}
+
+@media (max-width: 360px) {
+    .button-grid {
+        gap: 2px;
+        padding: 0 3px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+    
+    .grid-btn {
+        flex: 1;
+        min-width: 55px;
+        max-width: 70px;
+        height: 55px;
+        font-size: 0.65rem;
+        padding: 3px 1px;
+    }
+    
+    .grid-btn .icon {
+        font-size: 0.9rem;
+        margin-bottom: 1px;
+    }
+    
+    .grid-btn span:not(.icon) {
+        font-size: 0.55rem;
+        line-height: 1;
+        text-align: center;
     }
 }
 

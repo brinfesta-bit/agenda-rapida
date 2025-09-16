@@ -150,13 +150,13 @@ body {
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: 15px;
+    border-radius: 0;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    color: white;
+    box-shadow: none;
+    color: black;
     gap: 8px;
     flex: 1;
     min-width: 150px;
@@ -166,11 +166,11 @@ body {
 }
 
 .large-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
 }
 
 .small-btn {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    background: #11998e;
 }
 
 .square-btn {
@@ -182,8 +182,7 @@ body {
 }
 
 .grid-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    /* Sem efeitos de hover */
 }
 
 .grid-btn .icon {

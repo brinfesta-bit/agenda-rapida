@@ -47,53 +47,66 @@ body {
 
 /* Grid de Botões */
 .button-grid {
-    display: flex;
-    flex-wrap: nowrap;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
     gap: 10px;
     padding: 0 20px;
     margin-bottom: 20px;
     align-items: stretch;
     justify-content: center;
     overflow-x: auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.button-grid .grid-btn {
+    flex: 1 1 auto !important;
+    white-space: nowrap;
+    min-width: 0;
 }
 
 @media (max-width: 768px) {
     .button-grid {
-        gap: 8px;
-        padding: 0 15px;
-        flex-wrap: nowrap;
+        gap: 8px !important;
+        padding: 0 15px !important;
+        flex-wrap: nowrap !important;
+        flex-direction: row !important;
     }
     
-    .grid-btn {
-        flex: 1;
-        min-width: 80px;
-        max-width: 120px;
+    .button-grid .grid-btn {
+        flex: 1 1 auto !important;
+        min-width: 70px !important;
+        max-width: none !important;
+        width: auto !important;
     }
 }
 
 @media (max-width: 480px) {
     .button-grid {
-        gap: 3px;
-        padding: 0 5px;
-        flex-wrap: nowrap;
+        gap: 3px !important;
+        padding: 0 5px !important;
+        flex-wrap: nowrap !important;
+        flex-direction: row !important;
         overflow-x: auto;
     }
     
-    .grid-btn {
-        flex: 1;
-        min-width: 65px;
-        max-width: 85px;
+    .button-grid .grid-btn {
+        flex: 1 1 auto !important;
+        min-width: 60px !important;
+        max-width: none !important;
+        width: auto !important;
         height: 60px;
         font-size: 0.7rem;
         padding: 4px 1px;
     }
     
-    .grid-btn .icon {
+    .button-grid .grid-btn .icon {
         font-size: 1rem;
         margin-bottom: 2px;
     }
     
-    .grid-btn span:not(.icon) {
+    .button-grid .grid-btn span:not(.icon) {
         font-size: 0.6rem;
         line-height: 1;
         text-align: center;
@@ -102,27 +115,29 @@ body {
 
 @media (max-width: 360px) {
     .button-grid {
-        gap: 2px;
-        padding: 0 3px;
-        flex-wrap: nowrap;
+        gap: 2px !important;
+        padding: 0 3px !important;
+        flex-wrap: nowrap !important;
+        flex-direction: row !important;
         overflow-x: auto;
     }
     
-    .grid-btn {
-        flex: 1;
-        min-width: 55px;
-        max-width: 70px;
+    .button-grid .grid-btn {
+        flex: 1 1 auto !important;
+        min-width: 50px !important;
+        max-width: none !important;
+        width: auto !important;
         height: 55px;
         font-size: 0.65rem;
         padding: 3px 1px;
     }
     
-    .grid-btn .icon {
+    .button-grid .grid-btn .icon {
         font-size: 0.9rem;
         margin-bottom: 1px;
     }
     
-    .grid-btn span:not(.icon) {
+    .button-grid .grid-btn span:not(.icon) {
         font-size: 0.55rem;
         line-height: 1;
         text-align: center;

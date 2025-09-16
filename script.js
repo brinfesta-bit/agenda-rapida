@@ -54,7 +54,7 @@ const translations = {
         restore: 'Restaurar',
         deleteForever: 'Excluir',
         newItem: '',
-        enterText: 'Digite suas anotações aqui...',
+        enterText: 'Escreva o dia semana aquí e a cor mudará,depois organize por cor.',
         colorSettings: 'Personalizar Cores dos Dias:',
         customizeColors: 'Configurar Cores',
         colorCustomizationTitle: 'Personalizar Cores dos Dias',

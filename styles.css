@@ -150,7 +150,7 @@ body {
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: 0;
+    border-radius: 15px;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
@@ -166,23 +166,26 @@ body {
 }
 
 .large-btn {
-    background: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .small-btn {
-    background: #11998e;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
 
 .square-btn {
-    /* Mantém a mesma altura dos outros botões */
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: #333;
 }
 
 .square-btn .icon {
     font-size: 1.4rem;
+    color: #333;
 }
 
 .grid-btn:hover {
-    /* Sem efeitos de hover */
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .grid-btn .icon {

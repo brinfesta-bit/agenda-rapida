@@ -2,36 +2,54 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Agenda Rápida</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2196F3">
+    
+    <!-- Meta tags para PWA e responsividade -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="msapplication-TileColor" content="#667eea">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Agenda Rápida">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Meta tags para diferentes plataformas -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    
+    <!-- Ícones para diferentes dispositivos -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea'/><text y='70' font-size='60' text-anchor='middle' x='50' fill='white'>📅</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23667eea'/><text y='70' font-size='60' text-anchor='middle' x='50' fill='white'>📅</text></svg>">
 </head>
 <body>
     <div class="app-container">
-        <!-- Cabeçalho -->
+        <!-- Cabeçalho com Título Centralizado -->
         <header class="header">
-            <h1 id="app-title">Agenda Rápida</h1>
+            <h1 id="app-title">Agenda Rápida Arrastável</h1>
+            <div class="user-info" id="user-info" style="display: none;">
+                <span id="user-email"></span>
+                <button id="logout-btn" class="logout-btn">Sair</button>
+            </div>
         </header>
 
-        <!-- Botões Horizontais de Controle -->
-        <div class="control-buttons">
-            <button id="add-notes-btn" class="control-btn">
-                <span class="icon">📝</span>
-                <span id="add-notes-text">Adicionar Notas</span>
+        <!-- Grid de Botões -->
+        <div class="button-grid">
+            <button id="add-agenda-btn" class="grid-btn large-btn">
+                <span class="icon">➕</span>
+                <span id="add-agenda-text">Agendar</span>
             </button>
-            <button id="sort-btn" class="control-btn">
+            <button id="sort-btn" class="grid-btn large-btn">
                 <span class="icon">🔄</span>
                 <span id="sort-text">Classificar</span>
             </button>
-            <button id="scroll-down-btn" class="control-btn">
+            <button id="scroll-down-btn" class="grid-btn small-btn square-btn">
                 <span class="icon">⬇️</span>
                 <span id="scroll-text">Rolar</span>
             </button>
-            <button id="settings-btn" class="control-btn">
+            <button id="settings-btn" class="grid-btn small-btn square-btn">
                 <span class="icon">⚙️</span>
                 <span id="settings-text">Configurações</span>
             </button>
@@ -42,11 +60,7 @@
             <!-- Agendamentos serão inseridos aqui dinamicamente -->
         </div>
 
-        <!-- Botão Adicionar Novo Agendamento -->
-        <button id="add-agenda-btn" class="add-btn">
-            <span class="icon">➕</span>
-            <span id="add-agenda-text">Novo Agendamento</span>
-        </button>
+
 
         <!-- Modal de Configurações -->
         <div id="settings-modal" class="modal">
@@ -63,8 +77,17 @@
                         <option value="hi">हिन्दी</option>
                     </select>
                 </div>
+                <div class="setting-group">
+                    <label id="color-settings-label">Personalizar Cores dos Dias:</label>
+                    <button id="customize-colors-btn" class="customize-colors-btn">
+                        <span class="icon">🎨</span>
+                        <span id="customize-colors-text">Configurar Cores</span>
+                    </button>
+                </div>
             </div>
         </div>
+
+
 
         <!-- Modal de Classificação -->
         <div id="sort-modal" class="modal">
@@ -83,6 +106,8 @@
                 </div>
             </div>
         </div>
+
+
 
         <!-- Modal de Cores -->
         <div id="color-modal" class="modal">
@@ -139,10 +164,82 @@
             </div>
         </div>
 
+        <!-- Modal de Personalização de Cores -->
+        <div id="color-customization-modal" class="modal color-customization-modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="color-customization-title">Personalizar Cores dos Dias</h2>
+                <div class="color-options">
+                    <div class="color-option">
+                        <div class="color-option-info">
+                            <div class="color-circle" style="background-color: #FFEB3B;"></div>
+                            <span class="color-label" id="monday-label">Segunda-feira</span>
+                        </div>
+                        <input type="color" id="color-segunda" class="color-picker" value="#FFEB3B">
+                    </div>
+                    <div class="color-option">
+                        <div class="color-option-info">
+                            <div class="color-circle" style="background-color: #FF9800;"></div>
+                            <span class="color-label" id="tuesday-label">Terça-feira</span>
+                        </div>
+                        <input type="color" id="color-terça" class="color-picker" value="#FF9800">
+                    </div>
+                    <div class="color-option">
+                        <div class="color-option-info">
+                            <div class="color-circle" style="background-color: #FFC107;"></div>
+                            <span class="color-label" id="wednesday-label">Quarta-feira</span>
+                        </div>
+                        <input type="color" id="color-quarta" class="color-picker" value="#FFC107">
+                    </div>
+                    <div class="color-option">
+                        <div class="color-option-info">
+                            <div class="color-circle" style="background-color: #4CAF50;"></div>
+                            <span class="color-label" id="thursday-label">Quinta-feira</span>
+                        </div>
+                        <input type="color" id="color-quinta" class="color-picker" value="#4CAF50">
+                    </div>
+                    <div class="color-option">
+                        <div class="color-option-info">
+                            <div class="color-circle" style="background-color: #2196F3;"></div>
+                            <span class="color-label" id="friday-label">Sexta-feira</span>
+                        </div>
+                        <input type="color" id="color-sexta" class="color-picker" value="#2196F3">
+                    </div>
+                    <div class="color-option">
+                        <div class="color-option-info">
+                            <div class="color-circle" style="background-color: #9C27B0;"></div>
+                            <span class="color-label" id="saturday-label">Sábado</span>
+                        </div>
+                        <input type="color" id="color-sábado" class="color-picker" value="#9C27B0">
+                    </div>
+                    <div class="color-option">
+                        <div class="color-option-info">
+                            <div class="color-circle" style="background-color: #E91E63;"></div>
+                            <span class="color-label" id="sunday-label">Domingo</span>
+                        </div>
+                        <input type="color" id="color-domingo" class="color-picker" value="#E91E63">
+                    </div>
+                </div>
+                <button id="reset-colors-btn" class="reset-colors-btn">
+                    <span class="icon">🔄</span>
+                    <span id="reset-colors-text">Restaurar Padrão</span>
+                </button>
+                <button id="save-colors-btn" class="save-colors-btn">
+                    <span class="icon">💾</span>
+                    <span id="save-colors-text">Salvar Cores</span>
+                </button>
+            </div>
+        </div>
+
         <!-- Input de arquivo oculto -->
         <input type="file" id="file-input" accept="image/*,.pdf,.doc,.docx" style="display: none;" multiple>
     </div>
 
+    <!-- Scripts do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    
+    <!-- Script principal -->
     <script src="script.js"></script>
 </body>
 </html>

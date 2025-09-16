@@ -1,15 +1,17 @@
 {
   "name": "Agenda Rápida",
   "short_name": "Agenda",
-  "description": "Aplicativo de agenda rápida para dispositivos móveis com funcionalidades avançadas",
-  "version": "1.0.0",
+  "description": "Aplicativo de agenda rápida multiplataforma para Android, Mac e Windows",
+  "version": "2.0.0",
   "start_url": "./index.html",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "background_color": "#667eea",
-  "theme_color": "#2196F3",
-  "orientation": "portrait",
+  "theme_color": "#667eea",
+  "orientation": "any",
   "scope": "./",
   "lang": "pt-BR",
+  "dir": "ltr",
   "icons": [
     {
       "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9InVybCgjZ3JhZGllbnQwX2xpbmVhcl8xXzEpIi8+CjxwYXRoIGQ9Ik00OCA2NEg0OFY0OEg2NEg0OFY2NFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik04MCA2NEg4MFY0OEg5Nkg4MFY2NFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMTIgNjRIMTEyVjQ4SDEyOEgxMTJWNjRaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNNDggOTZINDhWODBINjRINDhWOTZaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNODAgOTZIODBWODBIOTZIODBWOTZaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTEyIDk2SDExMlY4MEgxMjhIMTEyVjk2WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTQ4IDEyOEg0OFYxMTJINjRINDhWMTI4WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTgwIDEyOEg4MFYxMTJIOTZIODBWMTI4WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTExMiAxMjhIMTEyVjExMkgxMjhIMTEyVjEyOFoiIGZpbGw9IndoaXRlIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50MF9saW5lYXJfMV8xIiB4MT0iMCIgeTE9IjAiIHgyPSIxOTIiIHkyPSIxOTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzIxOTZGMyIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2NjdlZWEiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K",

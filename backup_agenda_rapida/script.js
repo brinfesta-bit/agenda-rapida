@@ -7,6 +7,8 @@ let draggedItem = null;
 let currentEditingItem = null;
 let recognition = null;
 let isRecording = false;
+let currentUser = null;
+let isOfflineMode = false;
 
 // Cores dos dias da semana
 const dayColors = {
@@ -23,9 +25,9 @@ const dayColors = {
 const translations = {
     pt: {
         appTitle: 'Agenda Rápida',
-        addNotes: 'Adicionar Notas',
         sort: 'Classificar',
         scroll: 'Rolar',
+    
         settings: 'Configurações',
         newAgenda: 'Novo Agendamento',
         settingsTitle: 'Configurações',
@@ -33,6 +35,8 @@ const translations = {
         sortTitle: 'Classificar Por',
         sortByColor: 'Por Cor',
         sortByDate: 'Por Data',
+    
+
         colorTitle: 'Escolher Dia da Semana',
         monday: 'Segunda-feira',
         tuesday: 'Terça-feira',
@@ -49,14 +53,21 @@ const translations = {
         addFile: 'Arquivo',
         restore: 'Restaurar',
         deleteForever: 'Excluir',
-        newItem: 'Novo Item',
-        enterText: 'Digite suas anotações aqui...'
+        newItem: '',
+        enterText: 'Digite suas anotações aqui...',
+        colorSettings: 'Personalizar Cores dos Dias:',
+        customizeColors: 'Configurar Cores',
+        colorCustomizationTitle: 'Personalizar Cores dos Dias',
+        resetColors: 'Restaurar Padrão',
+        saveColors: 'Salvar Cores',
+        colorsReset: 'Cores restauradas para o padrão',
+        colorsSaved: 'Cores personalizadas salvas'
     },
     en: {
         appTitle: 'Quick Agenda',
-        addNotes: 'Add Notes',
         sort: 'Sort',
         scroll: 'Scroll',
+        organize: 'Organize',
         settings: 'Settings',
         newAgenda: 'New Schedule',
         settingsTitle: 'Settings',
@@ -64,6 +75,9 @@ const translations = {
         sortTitle: 'Sort By',
         sortByColor: 'By Color',
         sortByDate: 'By Date',
+        organizeTitle: 'Organize By',
+        organizeByColor: 'By Color',
+        organizeByDate: 'By Date',
         colorTitle: 'Choose Day of Week',
         monday: 'Monday',
         tuesday: 'Tuesday',
@@ -80,14 +94,21 @@ const translations = {
         addFile: 'File',
         restore: 'Restore',
         deleteForever: 'Delete',
-        newItem: 'New Item',
-        enterText: 'Enter your notes here...'
+        newItem: '',
+        enterText: 'Enter your notes here...',
+        colorSettings: 'Customize Day Colors:',
+        customizeColors: 'Configure Colors',
+        colorCustomizationTitle: 'Customize Day Colors',
+        resetColors: 'Reset Default',
+        saveColors: 'Save Colors',
+        colorsReset: 'Colors reset to default',
+        colorsSaved: 'Custom colors saved'
     },
     es: {
         appTitle: 'Agenda Rápida',
-        addNotes: 'Añadir Notas',
         sort: 'Clasificar',
         scroll: 'Desplazar',
+    
         settings: 'Configuración',
         newAgenda: 'Nueva Cita',
         settingsTitle: 'Configuración',
@@ -95,6 +116,8 @@ const translations = {
         sortTitle: 'Clasificar Por',
         sortByColor: 'Por Color',
         sortByDate: 'Por Fecha',
+    
+
         colorTitle: 'Elegir Día de la Semana',
         monday: 'Lunes',
         tuesday: 'Martes',
@@ -111,14 +134,21 @@ const translations = {
         addFile: 'Archivo',
         restore: 'Restaurar',
         deleteForever: 'Eliminar',
-        newItem: 'Nuevo Elemento',
-        enterText: 'Ingrese sus notas aquí...'
+        newItem: '',
+        enterText: 'Ingrese sus notas aquí...',
+        colorSettings: 'Personalizar Colores de Días:',
+        customizeColors: 'Configurar Colores',
+        colorCustomizationTitle: 'Personalizar Colores de Días',
+        resetColors: 'Restaurar Predeterminado',
+        saveColors: 'Guardar Colores',
+        colorsReset: 'Colores restaurados por defecto',
+        colorsSaved: 'Colores personalizados guardados'
     },
     zh: {
         appTitle: '快速日程',
-        addNotes: '添加笔记',
         sort: '排序',
         scroll: '滚动',
+        organize: '整理',
         settings: '设置',
         newAgenda: '新日程',
         settingsTitle: '设置',
@@ -126,6 +156,9 @@ const translations = {
         sortTitle: '排序方式',
         sortByColor: '按颜色',
         sortByDate: '按日期',
+        organizeTitle: '整理方式',
+        organizeByColor: '按颜色',
+        organizeByDate: '按日期',
         colorTitle: '选择星期',
         monday: '星期一',
         tuesday: '星期二',
@@ -142,14 +175,21 @@ const translations = {
         addFile: '文件',
         restore: '恢复',
         deleteForever: '删除',
-        newItem: '新项目',
-        enterText: '在此输入您的笔记...'
+        newItem: '',
+        enterText: '在此输入您的笔记...',
+        colorSettings: '自定义日期颜色:',
+        customizeColors: '配置颜色',
+        colorCustomizationTitle: '自定义日期颜色',
+        resetColors: '恢复默认',
+        saveColors: '保存颜色',
+        colorsReset: '颜色已恢复为默认',
+        colorsSaved: '自定义颜色已保存'
     },
     hi: {
         appTitle: 'त्वरित एजेंडा',
-        addNotes: 'नोट्स जोड़ें',
         sort: 'क्रमबद्ध करें',
         scroll: 'स्क्रॉल करें',
+        organize: 'व्यवस्थित करें',
         settings: 'सेटिंग्स',
         newAgenda: 'नया शेड्यूल',
         settingsTitle: 'सेटिंग्स',
@@ -157,6 +197,9 @@ const translations = {
         sortTitle: 'इसके द्वारा क्रमबद्ध करें',
         sortByColor: 'रंग के द्वारा',
         sortByDate: 'दिनांक के द्वारा',
+        organizeTitle: 'इसके द्वारा व्यवस्थित करें',
+        organizeByColor: 'रंग के द्वारा',
+        organizeByDate: 'दिनांक के द्वारा',
         colorTitle: 'सप्ताह का दिन चुनें',
         monday: 'सोमवार',
         tuesday: 'मंगलवार',
@@ -173,19 +216,77 @@ const translations = {
         addFile: 'फ़ाइल',
         restore: 'पुनर्स्थापित करें',
         deleteForever: 'हटाएं',
-        newItem: 'नया आइटम',
-        enterText: 'यहाँ अपने नोट्स दर्ज करें...'
+        newItem: '',
+        enterText: 'यहाँ अपने नोट्स दर्ज करें...',
+        colorSettings: 'दिन के रंग अनुकूलित करें:',
+        customizeColors: 'रंग कॉन्फ़िगर करें',
+        colorCustomizationTitle: 'दिन के रंग अनुकूलित करें',
+        resetColors: 'डिफ़ॉल्ट रीसेट करें',
+        saveColors: 'रंग सहेजें',
+        colorsReset: 'रंग डिफ़ॉल्ट पर रीसेट हो गए',
+        colorsSaved: 'कस्टम रंग सहेजे गए'
     }
 };
 
 // Inicialização
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    await checkAuthentication();
     initializeApp();
     loadData();
     setupEventListeners();
     setupSpeechRecognition();
     updateLanguage();
 });
+
+// Verificar autenticação
+async function checkAuthentication() {
+    if (typeof supabase === 'undefined') {
+        console.log('Supabase não configurado, usando modo offline');
+        isOfflineMode = true;
+        return;
+    }
+    
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+            // Redirecionar para página de login
+            window.location.href = 'auth.html';
+            return;
+        }
+        
+        currentUser = session.user;
+        setupUserInterface();
+        
+        // Migrar dados do localStorage se necessário
+        await migrateLocalDataToSupabase();
+        
+    } catch (error) {
+        console.error('Erro na autenticação:', error);
+        isOfflineMode = true;
+    }
+}
+
+// Configurar interface do usuário autenticado
+function setupUserInterface() {
+    if (currentUser) {
+        const userInfo = document.getElementById('user-info');
+        const userEmail = document.getElementById('user-email');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        userEmail.textContent = currentUser.email;
+        userInfo.style.display = 'flex';
+        
+        logoutBtn.addEventListener('click', async () => {
+            stopAutoSync();
+            await supabase.auth.signOut();
+            window.location.href = 'auth.html';
+        });
+        
+        // Iniciar sincronização automática
+        setupAutoSync();
+    }
+}
 
 // Inicializar aplicativo
 function initializeApp() {
@@ -198,16 +299,98 @@ function initializeApp() {
 // Configurar event listeners
 function setupEventListeners() {
     // Botões de controle
-    document.getElementById('add-notes-btn').addEventListener('click', () => {
-        // Funcionalidade de adicionar notas globais (futura implementação)
-        showToast('Funcionalidade em desenvolvimento');
-    });
     
     document.getElementById('sort-btn').addEventListener('click', () => {
         document.getElementById('sort-modal').style.display = 'block';
     });
     
     document.getElementById('scroll-down-btn').addEventListener('click', scrollToBottom);
+
+    // Configurar detecção automática de dias da semana
+    setupWeekdayDetection();
+
+// Configurar detecção automática de dias da semana
+function setupWeekdayDetection() {
+    const dayColors = {
+        'segunda': '#FF5722',
+        'terça': '#FF9800', 
+        'quarta': '#FFC107',
+        'quinta': '#4CAF50',
+        'sexta': '#2196F3',
+        'sábado': '#9C27B0',
+        'domingo': '#F44336'
+    };
+
+    function checkForWeekdays(text, item) {
+        const lowerText = text.toLowerCase();
+        for (const [day, color] of Object.entries(dayColors)) {
+            if (lowerText.includes(day)) {
+                item.day = day;
+                item.color = color;
+                
+                // Atualizar classe CSS do elemento
+                const element = document.querySelector(`[data-id="${item.id}"]`);
+                if (element) {
+                    element.className = `agenda-item ${day}`;
+                }
+                saveData();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Adicionar listeners para campos de título
+    document.addEventListener('blur', (e) => {
+        if (e.target.classList.contains('item-title')) {
+            const itemElement = e.target.closest('.agenda-item');
+            if (itemElement) {
+                const itemId = itemElement.dataset.id;
+                const item = agendaItems.find(item => item.id === itemId);
+                if (item) {
+                    checkForWeekdays(e.target.value, item);
+                }
+            }
+        }
+    }, true);
+
+    // Adicionar listeners para campos de notas
+    document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('item-notes')) {
+            const itemElement = e.target.closest('.agenda-item');
+            if (itemElement) {
+                const itemId = itemElement.dataset.id;
+                const item = agendaItems.find(item => item.id === itemId);
+                if (item) {
+                    checkForWeekdays(e.target.value, item);
+                }
+            }
+        }
+    }, true);
+
+    // Adicionar listeners para entrada de texto em tempo real
+    document.addEventListener('input', (e) => {
+        if (e.target.classList.contains('item-title') || e.target.classList.contains('item-notes')) {
+            const itemElement = e.target.closest('.agenda-item');
+            if (itemElement) {
+                const itemId = itemElement.dataset.id;
+                const item = agendaItems.find(item => item.id === itemId);
+                if (item) {
+                    checkForWeekdays(e.target.value, item);
+                }
+            }
+        }
+    }, true);
+
+    // Verificar itens existentes
+    agendaItems.forEach(item => {
+        const titleText = item.title || '';
+        const notesText = item.notes || '';
+        const combinedText = `${titleText} ${notesText}`;
+        checkForWeekdays(combinedText, item);
+    });
+}
+
     document.getElementById('settings-btn').addEventListener('click', () => {
         document.getElementById('settings-modal').style.display = 'block';
     });
@@ -228,6 +411,8 @@ function setupEventListeners() {
         sortItems('date');
         closeModal('sort-modal');
     });
+    
+
     
     // Configurações
     document.getElementById('language-select').addEventListener('change', (e) => {
@@ -275,6 +460,180 @@ function setupModalListeners() {
             }
         });
     });
+    
+    // Event listener para o botão "Configurar Cores"
+    const customizeColorsBtn = document.getElementById('customize-colors-btn');
+    if (customizeColorsBtn) {
+        customizeColorsBtn.addEventListener('click', () => {
+            openColorCustomizationModal();
+        });
+    }
+    
+    // Event listener para o botão "Restaurar Padrão"
+    const resetColorsBtn = document.getElementById('reset-colors-btn');
+    if (resetColorsBtn) {
+        resetColorsBtn.addEventListener('click', () => {
+            resetColorsToDefault();
+        });
+    }
+    
+    // Event listener para o botão "Salvar Cores"
+    const saveColorsBtn = document.getElementById('save-colors-btn');
+    if (saveColorsBtn) {
+        saveColorsBtn.addEventListener('click', () => {
+            saveCustomColors();
+        });
+    }
+}
+
+// Funções para personalização de cores
+function openColorCustomizationModal() {
+    const modal = document.getElementById('color-customization-modal');
+    if (modal) {
+        // Carregar cores atuais nos inputs
+        loadCurrentColorsInInputs();
+        modal.style.display = 'block';
+    }
+}
+
+function loadCurrentColorsInInputs() {
+    const colorInputs = {
+        'segunda': document.getElementById('color-segunda'),
+        'terça': document.getElementById('color-terca'),
+        'quarta': document.getElementById('color-quarta'),
+        'quinta': document.getElementById('color-quinta'),
+        'sexta': document.getElementById('color-sexta'),
+        'sábado': document.getElementById('color-sabado'),
+        'domingo': document.getElementById('color-domingo')
+    };
+    
+    Object.keys(colorInputs).forEach(day => {
+        const input = colorInputs[day];
+        if (input && dayColors[day]) {
+            input.value = dayColors[day];
+            // Atualizar também o círculo de cor correspondente
+            const colorCircle = input.parentElement.querySelector('.color-circle');
+            if (colorCircle) {
+                colorCircle.style.backgroundColor = dayColors[day];
+            }
+        }
+    });
+}
+
+function resetColorsToDefault() {
+    const defaultColors = {
+        'segunda': '#FFEB3B',
+        'terça': '#FF9800', 
+        'quarta': '#FFC107',
+        'quinta': '#4CAF50',
+        'sexta': '#2196F3',
+        'sábado': '#9C27B0',
+        'domingo': '#E91E63'
+    };
+    
+    // Atualizar o objeto dayColors
+    Object.assign(dayColors, defaultColors);
+    
+    // Atualizar os inputs
+    loadCurrentColorsInInputs();
+    
+    // Atualizar os estilos CSS
+    updateCSSColors();
+    
+    // Re-renderizar os itens para aplicar as novas cores
+    renderAgendaItems();
+    
+    // Salvar no localStorage
+    saveData();
+    
+    // Mostrar mensagem de confirmação
+    showToast(translations[currentLanguage].colorsReset);
+}
+
+function saveCustomColors() {
+    const colorInputs = {
+        'segunda': document.getElementById('color-segunda'),
+        'terça': document.getElementById('color-terca'),
+        'quarta': document.getElementById('color-quarta'),
+        'quinta': document.getElementById('color-quinta'),
+        'sexta': document.getElementById('color-sexta'),
+        'sábado': document.getElementById('color-sabado'),
+        'domingo': document.getElementById('color-domingo')
+    };
+    
+    // Atualizar o objeto dayColors com os novos valores
+    Object.keys(colorInputs).forEach(day => {
+        const input = colorInputs[day];
+        if (input && input.value) {
+            dayColors[day] = input.value;
+        }
+    });
+    
+    // Atualizar os estilos CSS
+    updateCSSColors();
+    
+    // Re-renderizar os itens para aplicar as novas cores
+    renderAgendaItems();
+    
+    // Fechar o modal
+    closeModal('color-customization-modal');
+    
+    // Salvar no localStorage
+    saveData();
+    
+    // Mostrar mensagem de confirmação
+    showToast(translations[currentLanguage].colorsSaved);
+}
+
+function updateCSSColors() {
+    // Remover estilos antigos se existirem
+    const existingStyle = document.getElementById('custom-day-colors');
+    if (existingStyle) {
+        existingStyle.remove();
+    }
+    
+    // Criar novos estilos CSS
+    const style = document.createElement('style');
+    style.id = 'custom-day-colors';
+    
+    let cssRules = '';
+    
+    Object.keys(dayColors).forEach(day => {
+        const color = dayColors[day];
+        cssRules += `
+            .agenda-item.${day} {
+                border-left-color: ${color} !important;
+            }
+            .agenda-item.${day} {
+                background: linear-gradient(135deg, ${color}, ${adjustBrightness(color, -20)}) !important;
+                color: ${getContrastColor(color)} !important;
+            }
+        `;
+    });
+    
+    style.textContent = cssRules;
+    document.head.appendChild(style);
+}
+
+// Função auxiliar para ajustar o brilho de uma cor
+function adjustBrightness(hex, percent) {
+    const num = parseInt(hex.replace('#', ''), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = (num >> 16) + amt;
+    const G = (num >> 8 & 0x00FF) + amt;
+    const B = (num & 0x0000FF) + amt;
+    return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+        (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+        (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+}
+
+// Função auxiliar para determinar a cor do texto baseada no contraste
+function getContrastColor(hexcolor) {
+    const r = parseInt(hexcolor.substr(1, 2), 16);
+    const g = parseInt(hexcolor.substr(3, 2), 16);
+    const b = parseInt(hexcolor.substr(5, 2), 16);
+    const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return brightness > 128 ? '#000000' : '#ffffff';
 }
 
 // Criar novo item de agendamento
@@ -284,8 +643,8 @@ function createNewAgendaItem() {
         id: generateId(),
         title: translations[currentLanguage].newItem,
         notes: '',
-        day: 'segunda',
-        color: dayColors['segunda'],
+        day: 'neutro',
+        color: '#9E9E9E',
         datetime: now.toISOString(),
         files: []
     };
@@ -294,12 +653,13 @@ function createNewAgendaItem() {
     renderAgendaItems();
     saveData();
     
-    // Focar no título do novo item
+    // Automaticamente focar no campo de notas do novo item
     setTimeout(() => {
-        const newItemElement = document.querySelector(`[data-id="${item.id}"] .item-title`);
-        if (newItemElement) {
-            newItemElement.focus();
-            newItemElement.select();
+        const newItemNotesElement = document.querySelector(`[data-id="${item.id}"] .item-notes`);
+        if (newItemNotesElement) {
+            newItemNotesElement.focus();
+            // Posicionar cursor no final do placeholder
+            newItemNotesElement.setSelectionRange(0, 0);
         }
     }, 100);
 }
@@ -330,11 +690,8 @@ function createAgendaItemElement(item) {
     });
     
     div.innerHTML = `
-        <div class="item-header">
-            <input type="text" class="item-title" value="${item.title}" 
-                   onchange="updateItemTitle('${item.id}', this.value)">
-            <div class="item-datetime">${formattedDate} ${formattedTime}</div>
-        </div>
+        <span class="item-title">${item.title}</span>
+        <div class="item-datetime">${formattedDate} ${formattedTime}</div>
         <div class="item-content">
             <textarea class="item-notes" placeholder="${translations[currentLanguage].enterText}" 
                       onchange="updateItemNotes('${item.id}', this.value)">${item.notes}</textarea>
@@ -342,7 +699,7 @@ function createAgendaItemElement(item) {
                 ${item.files.map(file => `
                     <div class="file-item">
                         <span>📎 ${file.name}</span>
-                        <span class="remove-file" onclick="removeFile('${item.id}', '${file.name}')">&times;</span>
+                        <span class="remove-file" onclick="removeFile('${item.id}', '${file.name}')"></span>
                     </div>
                 `).join('')}
             </div>
@@ -369,6 +726,11 @@ function createAgendaItemElement(item) {
     
     // Adicionar event listeners para drag and drop
     setupDragAndDrop(div);
+    
+    // Adicionar event listener para edição do título
+    const titleElement = div.querySelector('.item-title');
+    titleElement.style.cursor = 'pointer';
+    titleElement.addEventListener('click', () => editTitle(item.id, titleElement));
     
     return div;
 }
@@ -466,6 +828,55 @@ function updateItemTitle(id, title) {
         
         saveData();
     }
+}
+
+// Função para editar título clicando
+function editTitle(id, element) {
+    const currentTitle = element.textContent;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = currentTitle;
+    input.className = 'item-title-edit';
+    input.style.cssText = 'width: 100%; border: none; background: transparent; color: inherit; font-size: inherit; font-weight: inherit; outline: 2px solid #007bff; border-radius: 4px; padding: 2px;';
+    
+    // Substituir o div pelo input
+    element.parentNode.replaceChild(input, element);
+    input.focus();
+    input.select();
+    
+    // Função para salvar e voltar ao div
+    function saveAndRevert() {
+        const newTitle = input.value.trim() || currentTitle;
+        updateItemTitle(id, newTitle);
+        
+        const newDiv = document.createElement('div');
+        newDiv.className = 'item-title';
+        newDiv.onclick = () => editTitle(id, newDiv);
+        newDiv.style.cursor = 'pointer';
+        newDiv.textContent = newTitle;
+        
+        input.parentNode.replaceChild(newDiv, input);
+    }
+    
+    // Salvar ao pressionar Enter ou perder foco
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            saveAndRevert();
+        }
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            // Cancelar edição
+            const newDiv = document.createElement('div');
+            newDiv.className = 'item-title';
+            newDiv.onclick = () => editTitle(id, newDiv);
+            newDiv.style.cursor = 'pointer';
+            newDiv.textContent = currentTitle;
+            input.parentNode.replaceChild(newDiv, input);
+        }
+    });
+    
+    input.addEventListener('blur', saveAndRevert);
 }
 
 function updateItemNotes(id, notes) {
@@ -652,6 +1063,9 @@ function sortItems(type) {
     showToast(`Itens classificados por ${type === 'color' ? 'cor' : 'data'}`);
 }
 
+// Organizar itens (agrupamento visual)
+
+
 // Rolar para o final
 function scrollToBottom() {
     const container = document.getElementById('agenda-container');
@@ -738,9 +1152,9 @@ function updateLanguage() {
     
     // Atualizar textos da interface
     document.getElementById('app-title').textContent = t.appTitle;
-    document.getElementById('add-notes-text').textContent = t.addNotes;
     document.getElementById('sort-text').textContent = t.sort;
     document.getElementById('scroll-text').textContent = t.scroll;
+
     document.getElementById('settings-text').textContent = t.settings;
     document.getElementById('add-agenda-text').textContent = t.newAgenda;
     document.getElementById('settings-title').textContent = t.settingsTitle;
@@ -748,6 +1162,23 @@ function updateLanguage() {
     document.getElementById('sort-title').textContent = t.sortTitle;
     document.getElementById('sort-color-text').textContent = t.sortByColor;
     document.getElementById('sort-date-text').textContent = t.sortByDate;
+
+    // Atualizar textos da personalização de cores
+    document.getElementById('color-settings-label').textContent = t.colorSettings;
+    document.getElementById('customize-colors-text').textContent = t.customizeColors;
+    document.getElementById('color-customization-title').textContent = t.colorCustomizationTitle;
+    document.getElementById('reset-colors-text').textContent = t.resetColors;
+    document.getElementById('save-colors-text').textContent = t.saveColors;
+    
+    // Atualizar labels dos dias da semana no modal de personalização
+    document.getElementById('monday-label').textContent = t.monday;
+    document.getElementById('tuesday-label').textContent = t.tuesday;
+    document.getElementById('wednesday-label').textContent = t.wednesday;
+    document.getElementById('thursday-label').textContent = t.thursday;
+    document.getElementById('friday-label').textContent = t.friday;
+    document.getElementById('saturday-label').textContent = t.saturday;
+    document.getElementById('sunday-label').textContent = t.sunday;
+
     document.getElementById('color-title').textContent = t.colorTitle;
     document.getElementById('monday-text').textContent = t.monday;
     document.getElementById('tuesday-text').textContent = t.tuesday;
@@ -812,7 +1243,7 @@ function generateId() {
 }
 
 // Salvar dados
-function saveData() {
+async function saveData() {
     const data = {
         agendaItems,
         trashItems,
@@ -821,7 +1252,13 @@ function saveData() {
     };
     
     try {
+        // Salvar no localStorage (backup local)
         localStorage.setItem('agendaRapida', JSON.stringify(data));
+        
+        // Salvar no Supabase se autenticado
+        if (!isOfflineMode && currentUser && typeof supabase !== 'undefined') {
+            await saveUserData(currentUser.id, data);
+        }
     } catch (error) {
         console.error('Erro ao salvar dados:', error);
         showToast('Erro ao salvar dados');
@@ -829,11 +1266,28 @@ function saveData() {
 }
 
 // Carregar dados
-function loadData() {
+async function loadData() {
     try {
-        const savedData = localStorage.getItem('agendaRapida');
-        if (savedData) {
-            const data = JSON.parse(savedData);
+        let data = null;
+        
+        // Tentar carregar do Supabase primeiro se autenticado
+        if (!isOfflineMode && currentUser && typeof supabase !== 'undefined') {
+            try {
+                data = await loadUserData(currentUser.id);
+            } catch (error) {
+                console.log('Erro ao carregar do Supabase, usando localStorage:', error);
+            }
+        }
+        
+        // Fallback para localStorage se não conseguiu carregar do Supabase
+        if (!data) {
+            const savedData = localStorage.getItem('agendaRapida');
+            if (savedData) {
+                data = JSON.parse(savedData);
+            }
+        }
+        
+        if (data) {
             agendaItems = data.agendaItems || [];
             trashItems = data.trashItems || [];
             currentLanguage = data.currentLanguage || 'pt';
@@ -847,12 +1301,30 @@ function loadData() {
     }
 }
 
+// Função para rolar para o topo
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
 // Event listener para abrir lixeira
 document.addEventListener('DOMContentLoaded', function() {
-    // Adicionar botão da lixeira aos controles
-    const controlButtons = document.querySelector('.control-buttons');
+    // Adicionar botão da lixeira no final da lista de agendamentos
+    const agendaContainer = document.getElementById('agenda-container');
+    
+    // Container para os botões
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.style.display = 'flex';
+    buttonsContainer.style.gap = '10px';
+    buttonsContainer.style.justifyContent = 'center';
+    buttonsContainer.style.marginTop = '15px';
+    
+    // Botão da lixeira
     const trashButton = document.createElement('button');
-    trashButton.className = 'control-btn';
+    trashButton.id = 'trash-btn';
+    trashButton.className = 'trash-btn-bottom';
     trashButton.innerHTML = `
         <span class="icon">🗑️</span>
         <span>Lixeira</span>
@@ -862,9 +1334,22 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('trash-modal').style.display = 'block';
     });
     
-    // Inserir antes do botão de configurações
-    const settingsBtn = document.getElementById('settings-btn');
-    controlButtons.insertBefore(trashButton, settingsBtn);
+    // Botão de seta para cima
+    const scrollTopButton = document.createElement('button');
+    scrollTopButton.id = 'scroll-top-btn';
+    scrollTopButton.className = 'trash-btn-bottom';
+    scrollTopButton.innerHTML = `
+        <span class="icon">⬆️</span>
+        <span>Topo</span>
+    `;
+    scrollTopButton.addEventListener('click', scrollToTop);
+    
+    // Adicionar botões ao container
+    buttonsContainer.appendChild(trashButton);
+    buttonsContainer.appendChild(scrollTopButton);
+    
+    // Inserir o container após o container de agendamentos
+    agendaContainer.parentNode.insertBefore(buttonsContainer, agendaContainer.nextSibling);
 });
 
 // Adicionar estilos de animação para toast
@@ -881,6 +1366,116 @@ style.textContent = `
         }
     }
     
+// Migrar dados do localStorage para Supabase
+async function migrateLocalDataToSupabase() {
+    if (isOfflineMode || !currentUser || typeof supabase === 'undefined') {
+        return;
+    }
+    
+    try {
+        // Verificar se já existem dados no Supabase
+        const existingData = await loadUserData(currentUser.id);
+        
+        if (!existingData) {
+            // Carregar dados do localStorage
+            const localData = localStorage.getItem('agendaRapida');
+            
+            if (localData) {
+                const data = JSON.parse(localData);
+                
+                // Salvar no Supabase
+                await saveUserData(currentUser.id, data);
+                
+                console.log('Dados migrados do localStorage para Supabase');
+                showToast('Dados sincronizados com a nuvem');
+            }
+        }
+    } catch (error) {
+        console.error('Erro na migração de dados:', error);
+    }
+}
+
+// Sincronização automática de dados
+let syncInterval = null;
+
+function setupAutoSync() {
+    if (isOfflineMode || !currentUser || typeof supabase === 'undefined') {
+        return;
+    }
+    
+    // Sincronizar a cada 30 segundos
+    syncInterval = setInterval(async () => {
+        try {
+            await syncDataWithSupabase();
+        } catch (error) {
+            console.error('Erro na sincronização automática:', error);
+        }
+    }, 30000);
+    
+    // Sincronizar quando a página ganha foco
+    window.addEventListener('focus', async () => {
+        if (!isOfflineMode && currentUser) {
+            await syncDataWithSupabase();
+        }
+    });
+    
+    // Sincronizar antes de fechar a página
+    window.addEventListener('beforeunload', async () => {
+        if (!isOfflineMode && currentUser) {
+            await saveData();
+        }
+    });
+}
+
+async function syncDataWithSupabase() {
+    if (isOfflineMode || !currentUser || typeof supabase === 'undefined') {
+        return;
+    }
+    
+    try {
+        // Carregar dados mais recentes do Supabase
+        const cloudData = await loadUserData(currentUser.id);
+        
+        if (cloudData) {
+            // Verificar se os dados locais são diferentes
+            const localData = {
+                agendaItems,
+                trashItems,
+                currentLanguage,
+                version: '1.0'
+            };
+            
+            const localDataString = JSON.stringify(localData);
+            const cloudDataString = JSON.stringify(cloudData);
+            
+            if (localDataString !== cloudDataString) {
+                // Atualizar dados locais com dados da nuvem
+                agendaItems = cloudData.agendaItems || [];
+                trashItems = cloudData.trashItems || [];
+                currentLanguage = cloudData.currentLanguage || 'pt';
+                
+                // Atualizar interface
+                renderAgendaItems();
+                renderTrash();
+                updateLanguage();
+                
+                // Salvar no localStorage
+                localStorage.setItem('agendaRapida', JSON.stringify(cloudData));
+                
+                console.log('Dados sincronizados da nuvem');
+            }
+        }
+    } catch (error) {
+        console.error('Erro na sincronização:', error);
+    }
+}
+
+function stopAutoSync() {
+    if (syncInterval) {
+        clearInterval(syncInterval);
+        syncInterval = null;
+    }
+}
     @keyframes toastSlideOut {
         from {
             transform: translateX(-50%) translateY(0);
@@ -893,6 +1488,8 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Função removida - a cor dos agendamentos agora só é alterada através da paleta de cores
 
 // Exportar funções globais para uso no HTML
 window.updateItemTitle = updateItemTitle;
